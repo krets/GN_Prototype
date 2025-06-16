@@ -1,0 +1,125 @@
+{
+  "systems": {
+	"sol_system": {
+	  "name": "Sol System",
+	  "description": "The birthplace of humanity",
+	  "background": "res://backgrounds/sol_nebula.png",
+	  "connections": ["alpha_centauri"],
+	  "celestial_bodies": [
+		{
+		  "id": "earth",
+		  "name": "Earth",
+		  "type": "planet",
+		  "description": "The blue marble, humanity's homeworld",
+		  "position": { "x": 200, "y": -100 },
+		  "sprite": "res://sprites/planets/earth.png",
+		  "can_land": true,
+		  "services": ["shipyard", "outfitter", "commodity_exchange", "mission_computer"],
+		  "government": "confederation",
+		  "tech_level": 5,
+		  "population": 8000000000
+		},
+		{
+		  "id": "luna",
+		  "name": "Luna Station",
+		  "type": "station",
+		  "description": "Earth's moon mining facility",
+		  "position": { "x": 250, "y": -80 },
+		  "sprite": "res://sprites/stations/luna_station.png",
+		  "can_land": true,
+		  "services": ["outfitter", "commodity_exchange"],
+		  "government": "confederation",
+		  "tech_level": 4,
+		  "population": 50000
+		},
+		{
+		  "id": "mars",
+		  "name": "Mars",
+		  "type": "planet", 
+		  "description": "The red planet, now a bustling colony world",
+		  "position": { "x": 400, "y": 50 },
+		  "sprite": "res://sprites/planets/mars.png",
+		  "can_land": true,
+		  "services": ["shipyard", "outfitter", "commodity_exchange", "mission_computer"],
+		  "government": "confederation",
+		  "tech_level": 4,
+		  "population": 100000000
+		},
+		{
+		  "id": "asteroid_belt",
+		  "name": "Ceres Mining Station",
+		  "type": "station",
+		  "description": "A rough mining outpost in the asteroid belt",
+		  "position": { "x": 600, "y": 0 },
+		  "sprite": "res://sprites/stations/mining_station.png", 
+		  "can_land": true,
+		  "services": ["outfitter", "commodity_exchange", "bar"],
+		  "government": "independent",
+		  "tech_level": 3,
+		  "population": 25000
+		}
+	  ]
+	},
+	"alpha_centauri": {
+	  "name": "Alpha Centauri System",
+	  "description": "Humanity's first interstellar colony",
+	  "background": "res://backgrounds/alpha_centauri_nebula.png",
+	  "connections": ["sol_system"],
+	  "celestial_bodies": [
+		{
+		  "id": "proxima_b",
+		  "name": "New Geneva",
+		  "type": "planet",
+		  "description": "A terraformed world orbiting Proxima Centauri",
+		  "position": { "x": -200, "y": 100 },
+		  "sprite": "res://sprites/planets/new_geneva.png",
+		  "can_land": true,
+		  "services": ["shipyard", "outfitter", "commodity_exchange", "mission_computer"],
+		  "government": "confederation",
+		  "tech_level": 4,
+		  "population": 50000000
+		},
+		{
+		  "id": "centauri_station",
+		  "name": "Centauri Gate",
+		  "type": "station", 
+		  "description": "The jump gate station linking Sol and Centauri",
+		  "position": { "x": 0, "y": 0 },
+		  "sprite": "res://sprites/stations/jump_gate.png",
+		  "can_land": true,
+		  "services": ["outfitter", "commodity_exchange", "bar"],
+		  "government": "confederation", 
+		  "tech_level": 5,
+		  "population": 75000
+		},
+		{
+		  "id": "alpha_centauri_b",
+		  "name": "Research Station Kepler",
+		  "type": "station",
+		  "description": "A scientific research facility studying the binary star system",
+		  "position": { "x": -400, "y": -200 },
+		  "sprite": "res://sprites/stations/research_station.png",
+		  "can_land": true,
+		  "services": ["outfitter", "bar"],
+		  "government": "confederation",
+		  "tech_level": 6,
+		  "population": 5000
+		}
+	  ]
+	}
+  },
+  "governments": {
+	"confederation": {
+	  "name": "Terran Confederation",
+	  "description": "The unified government of human space",
+	  "color": "#0066CC",
+	  "starting_reputation": 0
+	},
+	"independent": {
+	  "name": "Independent Worlds",
+	  "description": "Free traders and frontier settlements",
+	  "color": "#CC6600", 
+	  "starting_reputation": 0
+	}
+  }
+}

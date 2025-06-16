@@ -1,0 +1,41 @@
+[gd_scene load_steps=4 format=3 uid="uid://bxvy6rfv2kbi4"]
+
+[ext_resource type="PackedScene" uid="uid://bs2vv8mki25h1" path="res://scenes/SystemScene.tscn" id="1_rvslj"]
+[ext_resource type="PackedScene" uid="uid://el1ywym68otq" path="res://scenes/PlayerShip.tscn" id="2_0bbpv"]
+[ext_resource type="Script" uid="uid://uojwd2ka5uy1" path="res://scripts/UIController.gd" id="3_0bbpv"]
+
+[node name="Main" type="Node2D"]
+
+[node name="SystemScene" parent="." instance=ExtResource("1_rvslj")]
+
+[node name="PlayerShip" parent="." instance=ExtResource("2_0bbpv")]
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="UIController" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("3_0bbpv")
+
+[node name="HyperspaceMenu" type="ColorRect" parent="UI/UIController"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/UIController/HyperspaceMenu"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="UI/UIController/HyperspaceMenu/VBoxContainer"]
+layout_mode = 2
+text = "Select Destination"
+
+[node name="SystemList" type="ItemList" parent="UI/UIController/HyperspaceMenu/VBoxContainer"]
+layout_mode = 2
+
+[node name="TravelButton" type="Button" parent="UI/UIController/HyperspaceMenu/VBoxContainer"]
+layout_mode = 2
+text = "Travel"
