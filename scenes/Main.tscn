@@ -29,13 +29,24 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Label" type="Label" parent="UI/UIController/HyperspaceMenu/VBoxContainer"]
+[node name="Title" type="Label" parent="UI/UIController/HyperspaceMenu/VBoxContainer"]
 layout_mode = 2
 text = "Select Destination"
 
 [node name="SystemList" type="ItemList" parent="UI/UIController/HyperspaceMenu/VBoxContainer"]
 layout_mode = 2
 
-[node name="TravelButton" type="Button" parent="UI/UIController/HyperspaceMenu/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/UIController/HyperspaceMenu/VBoxContainer"]
 layout_mode = 2
-text = "Travel"
+
+[node name="TravelButton" type="Button" parent="UI/UIController/HyperspaceMenu/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Jump"
+
+[node name="CancelButton" type="Button" parent="UI/UIController/HyperspaceMenu/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Cancel"
+
+[node name="InfoLabel" type="Label" parent="UI/UIController/HyperspaceMenu/VBoxContainer"]
+layout_mode = 2
+text = "Select destination system"
