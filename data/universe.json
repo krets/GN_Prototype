@@ -5,6 +5,16 @@
 	  "description": "The birthplace of humanity",
 	  "background": "res://backgrounds/sol_nebula.png",
 	  "connections": ["alpha_centauri"],
+	  "starfield": {
+		"layer_count": 3,
+		"base_density": 150,
+		"base_color": "#FFFFCC",
+		"parallax_speeds": [0.0, -0.5, -1],
+		"brightness_falloff": [1.0, 0.5, 0.2],
+		"size_range": [1.0, 4.0],
+		"twinkle_enabled": true,
+		"colored_stars": false
+	  },
 	  "celestial_bodies": [
 		{
 		  "id": "earth",
@@ -65,6 +75,17 @@
 	  "description": "Humanity's first interstellar colony",
 	  "background": "res://backgrounds/alpha_centauri_nebula.png",
 	  "connections": ["sol_system"],
+	  "starfield": {
+		"layer_count": 5,
+		"base_density": 200,
+		"base_color": "#CCCCFF",
+		"parallax_speeds": [0.0, 0.2, 0.4, 0.7, 1.0],
+		"brightness_falloff": [1.0, 0.9, 0.7, 0.5, 0.3],
+		"size_range": [1.0, 4.0],
+		"twinkle_enabled": true,
+		"colored_stars": true,
+		"star_colors": ["#FFFFFF", "#CCCCFF", "#FFCCCC", "#CCFFCC"]
+	  },
 	  "celestial_bodies": [
 		{
 		  "id": "proxima_b",

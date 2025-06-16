@@ -1,5 +1,5 @@
 # =============================================================================
-# SYSTEM SCENE - Container for a star system
+# COMPLETE UPDATED SYSTEMSCENE.GD - Replace your existing SystemScene.gd with this
 # =============================================================================
 # SystemScene.gd
 extends Node2D
@@ -19,6 +19,9 @@ func setup_system(system_data: Dictionary):
 	clear_system()
 	spawn_celestial_bodies(system_data.get("celestial_bodies", []))
 	
+	# ADD STARFIELD SETUP
+	setup_starfield_for_system(system_data)
+	
 	# Spawn player at designated location
 	var player = UniverseManager.player_ship
 	if player and player_spawn:
@@ -36,3 +39,16 @@ func spawn_celestial_bodies(bodies_data: Array):
 		celestial_body.celestial_data = body_data
 		celestial_body.position = Vector2(body_data.position.x, body_data.position.y)
 		celestial_bodies_container.add_child(celestial_body)
+
+func setup_starfield_for_system(system_data: Dictionary):
+	# Find or create starfield manager
+	var starfield = get_node("StarfieldManager") if has_node("StarfieldManager") else null
+	
+	if not starfield:
+		# Create new starfield manager
+		var starfield_script = load("res://scripts/StarfieldManager.gd")
+		starfield = starfield_script.new()
+		starfield.name = "StarfieldManager"
+		add_child(starfield)
+		# Move starfield to back so it renders behind everything
+		move_child(starfield, 0)
