@@ -1,8 +1,8 @@
 extends Node2D
 
-@export var num_layers: int = 5
-@export var base_parallax_scale: float = 1
-@export var scale_increment: float = 0.2
+@export var num_layers: int = 2
+@export var base_parallax_scale: float = 0.0
+@export var scale_increment: float = 20
 @export var viewport_margin: float = 200.0
 
 var player_ship: Node2D
@@ -20,6 +20,7 @@ func _ready():
 	
 	# Create the starfield layers
 	create_starfield_layers()
+	print("Created ", get_child_count(), " starfield layers")
 
 func create_starfield_layers():
 	var shader = load("res://shaders/StarfieldShader.gdshader")
@@ -32,13 +33,12 @@ func create_starfield_layers():
 		var material = ShaderMaterial.new()
 		material.shader = shader
 		
-		# Much fewer, larger, calmer stars
-		material.set_shader_parameter("star_density", 0.0001 / (i + 1))  # Way less dense
-		material.set_shader_parameter("star_brightness", 1.0 - (i * 0.15))
-		material.set_shader_parameter("twinkle_speed", 0.0)  # Much slower twinkle
-		material.set_shader_parameter("min_star_size", 5.0 + i * 20.0)  # Much bigger
-		material.set_shader_parameter("max_star_size", 15.0 + i * 5.0)  # Much bigger
-		material.set_shader_parameter("layer_scale", 1 / (i + 1))
+		# Set star parameters for each layer
+		material.set_shader_parameter("star_density", 3 / (i + 1))  # Fewer stars per layer
+		material.set_shader_parameter("star_brightness", 1.0 - (i * 0.1))
+		material.set_shader_parameter("twinkle_speed", 0.5)
+		material.set_shader_parameter("star_size", 2.0 + (i * 5.0))  # 10-30 pixel stars
+		material.set_shader_parameter("layer_scale", 2 / (i + 1))
 		
 		layer.material = material
 		layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -53,7 +53,7 @@ func create_starfield_layers():
 		add_child(layer)
 		starfield_layers.append(layer)
 	
-	print("Created ", num_layers, " starfield layers")
+	print("Created ", num_layers, " starfield layers with shader")
 
 func _process(_delta):
 	if not player_ship or not camera:
