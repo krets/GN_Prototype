@@ -24,15 +24,17 @@ shape = SubResource("CircleShape2D_hkka0")
 [node name="EngineParticles" type="CPUParticles2D" parent="."]
 position = Vector2(-1, 22)
 emitting = false
-amount = 200
+amount = 300
+lifetime = 1.12
+lifetime_randomness = 0.65
 direction = Vector2(0, 1)
 spread = 20.0
 gravity = Vector2(0, 0)
 initial_velocity_min = 100.0
 initial_velocity_max = 100.0
 color = Color(1, 1, 0.286275, 1)
-hue_variation_min = 0.65
-hue_variation_max = 0.65
+hue_variation_min = 0.55
+hue_variation_max = 0.91
 
 [node name="InteractionArea" type="Area2D" parent="."]
 
