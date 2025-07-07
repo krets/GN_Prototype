@@ -1,63 +1,48 @@
+// BETTER DEBUG SHADER - Small, dense stars
 shader_type canvas_item;
 
-uniform float star_density : hint_range(0.0, 0.1) = 0.002;
+uniform float star_density : hint_range(0.0001, 0.01) = 0.002;
 uniform float star_brightness : hint_range(0.0, 2.0) = 1.0;
-uniform float twinkle_speed : hint_range(0.0, 5.0) = 0.5;
-uniform float star_size : hint_range(1.0, 50.0) = 10.0;
-uniform vec2 world_offset = vec2(0.0, 0.0);
-uniform float layer_scale : hint_range(0.1, 10.0) = 1.0;
+uniform float star_size : hint_range(1.0, 20.0) = 4.0;
 
-// Hash function for procedural generation
-float hash(vec2 p) {
-    p = fract(p * vec2(123.34, 456.21));
-    p += dot(p, p + 45.32);
+// Simple hash function
+float hash21(vec2 p) {
+    p = fract(p * vec2(234.34, 435.345));
+    p += dot(p, p + 34.23);
     return fract(p.x * p.y);
 }
 
 void fragment() {
-    // Get world position
-    vec2 world_pos = (UV * vec2(2000.0, 2000.0)) + world_offset;
-    world_pos *= layer_scale;
+    // Create a grid of potential star positions
+    vec2 grid_size = vec2(30.0);  // 30x30 grid across the UV space
+    vec2 grid_pos = floor(UV * grid_size);
+    vec2 cell_uv = fract(UV * grid_size);
     
-    // Grid-based star generation
-    vec2 grid_pos = floor(world_pos / 100.0);
+    float star_alpha = 0.0;
     
-    float stars = 0.0;
+    // Use hash to randomly decide if this cell has a star
+    float star_chance = hash21(grid_pos);
     
-    // Check neighboring cells
-    for (int x = -1; x <= 1; x++) {
-        for (int y = -1; y <= 1; y++) {
-            vec2 neighbor = grid_pos + vec2(float(x), float(y));
-            
-            // Only create star based on density
-            if (hash(neighbor + vec2(7.0, 13.0)) > star_density) {
-                continue;
-            }
-            
-            // Star position
-            vec2 star_offset = vec2(hash(neighbor), hash(neighbor + vec2(17.0, 31.0)));
-            vec2 star_pos = (neighbor + star_offset) * 100.0;
-            
-            // Distance to star
-            float dist = length(world_pos - star_pos);
-            
-            if (dist < star_size) {
-                // Star intensity
-                float intensity = 1.0 - (dist / star_size);
-                intensity = pow(intensity, 2.0); // Softer falloff
-                
-                // Twinkle
-                float twinkle = sin(TIME * twinkle_speed + hash(neighbor) * 6.28) * 0.1 + 0.9;
-                intensity *= twinkle;
-                
-                stars = max(stars, intensity);
-            }
+    // Adjust the density scaling to make stars more visible
+    float adjusted_density = star_density * 50000.0;  // Much higher multiplier
+    
+    // Only create a star if the random value is within our density range
+    if (star_chance < adjusted_density) {
+        // Position the star randomly within the cell
+        vec2 star_pos = vec2(hash21(grid_pos + vec2(12.34, 56.78)), 
+                            hash21(grid_pos + vec2(78.90, 23.45)));
+        
+        // Distance from current pixel to star center
+        float dist = length(cell_uv - star_pos) * grid_size.x;
+        
+        // Create small, sharp stars
+        float star_radius = star_size;
+        if (dist < star_radius) {
+            float intensity = 1.0 - (dist / star_radius);
+            intensity = pow(intensity, 2.0);  // Sharp but not too sharp
+            star_alpha = intensity * star_brightness;
         }
     }
     
-    // Apply brightness
-    stars *= star_brightness;
-    
-    // Output
-    COLOR = vec4(1.0, 1.0, 1.0, stars);
+    COLOR = vec4(1.0, 1.0, 1.0, star_alpha);
 }

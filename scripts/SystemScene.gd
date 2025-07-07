@@ -1,5 +1,5 @@
 # =============================================================================
-# COMPLETE UPDATED SYSTEMSCENE.GD - Replace your existing SystemScene.gd with this
+# UPDATED SYSTEMSCENE.GD - Replace your existing SystemScene.gd with this
 # =============================================================================
 # SystemScene.gd
 extends Node2D
@@ -7,6 +7,8 @@ class_name SystemScene
 
 @onready var celestial_bodies_container = $CelestialBodies
 @onready var player_spawn = $PlayerSpawn
+
+var parallax_starfield: ParallaxStarfield
 
 func _ready():
 	UniverseManager.system_changed.connect(_on_system_changed)
@@ -17,10 +19,8 @@ func _on_system_changed(system_id: String):
 
 func setup_system(system_data: Dictionary):
 	clear_system()
+	setup_parallax_starfield(system_data)
 	spawn_celestial_bodies(system_data.get("celestial_bodies", []))
-	
-	# ADD STARFIELD SETUP
-	setup_starfield_for_system(system_data)
 	
 	# Spawn player at designated location
 	var player = UniverseManager.player_ship
@@ -32,6 +32,25 @@ func setup_system(system_data: Dictionary):
 func clear_system():
 	for child in celestial_bodies_container.get_children():
 		child.queue_free()
+	
+	# Remove old starfield
+	if parallax_starfield:
+		parallax_starfield.queue_free()
+		parallax_starfield = null
+
+func setup_parallax_starfield(system_data: Dictionary):
+	# Load and instantiate the parallax starfield scene
+	var starfield_scene = preload("res://scenes/ParallaxStarfield.tscn")
+	parallax_starfield = starfield_scene.instantiate()
+	
+	# Add it as the first child (renders behind everything)
+	add_child(parallax_starfield)
+	move_child(parallax_starfield, 0)
+	
+	# Configure the starfield for this system
+	parallax_starfield.load_system_starfield(system_data)
+	
+	print("Setup parallax starfield for system: ", system_data.get("name", "Unknown"))
 
 func spawn_celestial_bodies(bodies_data: Array):
 	for body_data in bodies_data:
@@ -39,16 +58,3 @@ func spawn_celestial_bodies(bodies_data: Array):
 		celestial_body.celestial_data = body_data
 		celestial_body.position = Vector2(body_data.position.x, body_data.position.y)
 		celestial_bodies_container.add_child(celestial_body)
-
-func setup_starfield_for_system(system_data: Dictionary):
-	# Find or create starfield manager
-	var starfield = get_node("StarfieldManager") if has_node("StarfieldManager") else null
-	
-	if not starfield:
-		# Create new starfield manager
-		var starfield_script = load("res://scripts/StarfieldManager.gd")
-		starfield = starfield_script.new()
-		starfield.name = "StarfieldManager"
-		add_child(starfield)
-		# Move starfield to back so it renders behind everything
-		move_child(starfield, 0)

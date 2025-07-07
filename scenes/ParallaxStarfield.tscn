@@ -1,0 +1,85 @@
+[gd_scene load_steps=7 format=3 uid="uid://drb0em1la86we"]
+
+[ext_resource type="Script" uid="uid://d0ieffeo8wm1v" path="res://scripts/ParallaxStarfield.gd" id="1_uikql"]
+[ext_resource type="Shader" uid="uid://rhp1mq3bjshx" path="res://shaders/StarfieldShader.gdshader" id="2_mx1rw"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_65eys"]
+shader = ExtResource("2_mx1rw")
+shader_parameter/star_density = 0.002
+shader_parameter/star_brightness = 1.0
+shader_parameter/star_size = 4.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_obgmf"]
+shader = ExtResource("2_mx1rw")
+shader_parameter/star_density = 0.002
+shader_parameter/star_brightness = 1.0
+shader_parameter/star_size = 4.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0t005"]
+shader = ExtResource("2_mx1rw")
+shader_parameter/star_density = 0.002
+shader_parameter/star_brightness = 1.0
+shader_parameter/star_size = 4.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mx1rw"]
+shader = ExtResource("2_mx1rw")
+shader_parameter/star_density = 0.002
+shader_parameter/star_brightness = 1.0
+shader_parameter/star_size = 4.0
+
+[node name="ParallaxStarfield" type="ParallaxBackground"]
+script = ExtResource("1_uikql")
+
+[node name="BackgroundLayer" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0, 0)
+
+[node name="BackgroundRect" type="ColorRect" parent="BackgroundLayer"]
+offset_left = -2000.0
+offset_top = -2000.0
+offset_right = 2000.0
+offset_bottom = 2000.0
+color = Color(0.286498, 0.542927, 0.484727, 1)
+
+[node name="StarLayer1" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.1, 0.1)
+
+[node name="StarRect1" type="ColorRect" parent="StarLayer1"]
+material = SubResource("ShaderMaterial_65eys")
+offset_left = -4000.0
+offset_top = -4000.0
+offset_right = 4000.0
+offset_bottom = 4000.0
+mouse_filter = 2
+
+[node name="StarLayer2" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.3, 0.3)
+
+[node name="StarRect2" type="ColorRect" parent="StarLayer2"]
+material = SubResource("ShaderMaterial_obgmf")
+offset_left = -4000.0
+offset_top = -4000.0
+offset_right = 4000.0
+offset_bottom = 4000.0
+mouse_filter = 2
+
+[node name="StarLayer3" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.6, 0.6)
+
+[node name="StarRect3" type="ColorRect" parent="StarLayer3"]
+material = SubResource("ShaderMaterial_0t005")
+offset_left = -4000.0
+offset_top = -4000.0
+offset_right = 4000.0
+offset_bottom = 4000.0
+mouse_filter = 2
+
+[node name="StarLayer4" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.9, 0.9)
+
+[node name="StarRect4" type="ColorRect" parent="StarLayer4"]
+material = SubResource("ShaderMaterial_mx1rw")
+offset_left = -4000.0
+offset_top = -4000.0
+offset_right = 4000.0
+offset_bottom = 4000.0
+mouse_filter = 2
