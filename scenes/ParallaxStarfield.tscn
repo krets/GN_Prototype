@@ -6,26 +6,26 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_65eys"]
 shader = ExtResource("2_mx1rw")
 shader_parameter/star_density = 0.002
-shader_parameter/star_brightness = 1.0
-shader_parameter/star_size = 4.0
+shader_parameter/star_brightness = 0.5
+shader_parameter/star_size = 0.2
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_obgmf"]
 shader = ExtResource("2_mx1rw")
 shader_parameter/star_density = 0.002
 shader_parameter/star_brightness = 1.0
-shader_parameter/star_size = 4.0
+shader_parameter/star_size = 0.2
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0t005"]
 shader = ExtResource("2_mx1rw")
 shader_parameter/star_density = 0.002
 shader_parameter/star_brightness = 1.0
-shader_parameter/star_size = 4.0
+shader_parameter/star_size = 0.1
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mx1rw"]
 shader = ExtResource("2_mx1rw")
-shader_parameter/star_density = 0.002
-shader_parameter/star_brightness = 1.0
-shader_parameter/star_size = 4.0
+shader_parameter/star_density = 5.8331
+shader_parameter/star_brightness = 1.317
+shader_parameter/star_size = 1.228
 
 [node name="ParallaxStarfield" type="ParallaxBackground"]
 script = ExtResource("1_uikql")
@@ -38,10 +38,11 @@ offset_left = -2000.0
 offset_top = -2000.0
 offset_right = 2000.0
 offset_bottom = 2000.0
-color = Color(0.286498, 0.542927, 0.484727, 1)
+color = Color(0, 0, 0, 1)
 
 [node name="StarLayer1" type="ParallaxLayer" parent="."]
 motion_scale = Vector2(0.1, 0.1)
+motion_mirroring = Vector2(4000, 4000)
 
 [node name="StarRect1" type="ColorRect" parent="StarLayer1"]
 material = SubResource("ShaderMaterial_65eys")
@@ -53,6 +54,7 @@ mouse_filter = 2
 
 [node name="StarLayer2" type="ParallaxLayer" parent="."]
 motion_scale = Vector2(0.3, 0.3)
+motion_mirroring = Vector2(4000, 4000)
 
 [node name="StarRect2" type="ColorRect" parent="StarLayer2"]
 material = SubResource("ShaderMaterial_obgmf")
@@ -64,6 +66,7 @@ mouse_filter = 2
 
 [node name="StarLayer3" type="ParallaxLayer" parent="."]
 motion_scale = Vector2(0.6, 0.6)
+motion_mirroring = Vector2(4000, 4000)
 
 [node name="StarRect3" type="ColorRect" parent="StarLayer3"]
 material = SubResource("ShaderMaterial_0t005")
@@ -74,7 +77,7 @@ offset_bottom = 4000.0
 mouse_filter = 2
 
 [node name="StarLayer4" type="ParallaxLayer" parent="."]
-motion_scale = Vector2(0.9, 0.9)
+motion_mirroring = Vector2(8000, 8000)
 
 [node name="StarRect4" type="ColorRect" parent="StarLayer4"]
 material = SubResource("ShaderMaterial_mx1rw")

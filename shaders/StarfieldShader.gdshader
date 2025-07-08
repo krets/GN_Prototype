@@ -1,9 +1,9 @@
 // BETTER DEBUG SHADER - Small, dense stars
 shader_type canvas_item;
 
-uniform float star_density : hint_range(0.0001, 0.01) = 0.002;
+uniform float star_density : hint_range(0.0001, 10) = 0.002;
 uniform float star_brightness : hint_range(0.0, 2.0) = 1.0;
-uniform float star_size : hint_range(1.0, 20.0) = 4.0;
+uniform float star_size : hint_range(0.001, 2.0) = 1.0;
 
 // Simple hash function
 float hash21(vec2 p) {
@@ -14,7 +14,7 @@ float hash21(vec2 p) {
 
 void fragment() {
     // Create a grid of potential star positions
-    vec2 grid_size = vec2(30.0);  // 30x30 grid across the UV space
+    vec2 grid_size = vec2(50.0);  // 30x30 grid across the UV space
     vec2 grid_pos = floor(UV * grid_size);
     vec2 cell_uv = fract(UV * grid_size);
     
@@ -39,7 +39,7 @@ void fragment() {
         float star_radius = star_size;
         if (dist < star_radius) {
             float intensity = 1.0 - (dist / star_radius);
-            intensity = pow(intensity, 2.0);  // Sharp but not too sharp
+            intensity = pow(intensity, 5.0);  // Sharp but not too sharp
             star_alpha = intensity * star_brightness;
         }
     }

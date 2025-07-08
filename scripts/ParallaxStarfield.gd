@@ -65,7 +65,7 @@ func find_and_assign_camera():
 func setup_background():
 	var bg_rect = background_layer.get_node("BackgroundRect")
 	if bg_rect:
-		bg_rect.color = Color.GREEN  # Make it green for testing
+		bg_rect.color = Color.BLACK  # Make it green for testing
 		bg_rect.size = Vector2(4000, 4000)
 		bg_rect.position = Vector2(-2000, -2000)
 		print("Setup background rect - Color: ", bg_rect.color, " Size: ", bg_rect.size)
