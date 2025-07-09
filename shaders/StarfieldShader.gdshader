@@ -26,7 +26,7 @@ void fragment() {
 
     // Create variable grid size based on density
     // Higher density = smaller grid cells = more potential star locations
-    float grid_scale = mix(20.0, 200.0, sqrt(star_density * 1.0));
+    float grid_scale = mix(10.0, 200.0, sqrt(star_density * 1.0));
     vec2 grid_pos = floor(world_pos * grid_scale);
     vec2 cell_uv = fract(world_pos * grid_scale);
 
@@ -37,7 +37,7 @@ void fragment() {
 
     // Much more direct density control
     // star_density of 0.001 = very sparse, 0.1 = very dense
-    float density_threshold = star_density * 10.0;
+    float density_threshold = star_density * 5.0;
 
     if (star_chance < density_threshold) {
         // Random position within cell

@@ -5,26 +5,26 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_obgmf"]
 shader = ExtResource("2_mx1rw")
 shader_parameter/star_density = 0.0641
-shader_parameter/star_brightness = 0.234
-shader_parameter/star_size = 1.406
-shader_parameter/twinkle_speed = 0.0
+shader_parameter/star_brightness = 0.264
+shader_parameter/star_size = 1.901
+shader_parameter/twinkle_speed = 0.129
 shader_parameter/world_offset = Vector2(0, 0)
 shader_parameter/tile_size = 200.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mx1rw"]
 shader = ExtResource("2_mx1rw")
 shader_parameter/star_density = 0.0841
-shader_parameter/star_brightness = 0.5
-shader_parameter/star_size = 3.881
-shader_parameter/twinkle_speed = 0.0
+shader_parameter/star_brightness = 0.241
+shader_parameter/star_size = 4.178
+shader_parameter/twinkle_speed = 0.109
 shader_parameter/world_offset = Vector2(0, 0)
 shader_parameter/tile_size = 200.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_uikql"]
 shader = ExtResource("2_mx1rw")
 shader_parameter/star_density = 0.0301
-shader_parameter/star_brightness = 0.7
-shader_parameter/star_size = 4.772
+shader_parameter/star_brightness = 0.551
+shader_parameter/star_size = 3.089
 shader_parameter/twinkle_speed = 0.0
 shader_parameter/world_offset = Vector2(0, 0)
 shader_parameter/tile_size = 200.0
@@ -32,8 +32,8 @@ shader_parameter/tile_size = 200.0
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_65eys"]
 shader = ExtResource("2_mx1rw")
 shader_parameter/star_density = 0.0101
-shader_parameter/star_brightness = 1.294
-shader_parameter/star_size = 2.603
+shader_parameter/star_brightness = 0.94
+shader_parameter/star_size = 1.567
 shader_parameter/twinkle_speed = 0.0
 shader_parameter/world_offset = Vector2(0, 0)
 shader_parameter/tile_size = 50.0
