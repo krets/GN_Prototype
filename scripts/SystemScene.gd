@@ -8,8 +8,6 @@ class_name SystemScene
 @onready var celestial_bodies_container = $CelestialBodies
 @onready var player_spawn = $PlayerSpawn
 
-var parallax_starfield: ParallaxStarfield
-
 func _ready():
 	UniverseManager.system_changed.connect(_on_system_changed)
 	setup_system(UniverseManager.get_current_system())
@@ -19,7 +17,6 @@ func _on_system_changed(system_id: String):
 
 func setup_system(system_data: Dictionary):
 	clear_system()
-	setup_parallax_starfield(system_data)
 	spawn_celestial_bodies(system_data.get("celestial_bodies", []))
 	
 	# Spawn player at designated location
@@ -32,25 +29,7 @@ func setup_system(system_data: Dictionary):
 func clear_system():
 	for child in celestial_bodies_container.get_children():
 		child.queue_free()
-	
-	# Remove old starfield
-	if parallax_starfield:
-		parallax_starfield.queue_free()
-		parallax_starfield = null
 
-func setup_parallax_starfield(system_data: Dictionary):
-	# Load and instantiate the parallax starfield scene
-	var starfield_scene = preload("res://scenes/ParallaxStarfield.tscn")
-	parallax_starfield = starfield_scene.instantiate()
-	
-	# Add it as the first child (renders behind everything)
-	add_child(parallax_starfield)
-	move_child(parallax_starfield, 0)
-	
-	# Configure the starfield for this system
-	parallax_starfield.load_system_starfield(system_data)
-	
-	print("Setup parallax starfield for system: ", system_data.get("name", "Unknown"))
 
 func spawn_celestial_bodies(bodies_data: Array):
 	for body_data in bodies_data:

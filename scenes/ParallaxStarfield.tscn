@@ -1,101 +1,110 @@
-[gd_scene load_steps=7 format=3 uid="uid://drb0em1la86we"]
+[gd_scene load_steps=6 format=3 uid="uid://drb0em1la86we"]
 
-[ext_resource type="Script" uid="uid://d0ieffeo8wm1v" path="res://scripts/ParallaxStarfield.gd" id="1_uikql"]
 [ext_resource type="Shader" uid="uid://rhp1mq3bjshx" path="res://shaders/StarfieldShader.gdshader" id="2_mx1rw"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_65eys"]
-shader = ExtResource("2_mx1rw")
-shader_parameter/star_density = 8.3331
-shader_parameter/star_brightness = 2.0
-shader_parameter/star_size = 20.0
-shader_parameter/twinkle_speed = 0.208
-shader_parameter/world_offset = Vector2(0, 0)
-shader_parameter/tile_size = 347.656
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_obgmf"]
 shader = ExtResource("2_mx1rw")
-shader_parameter/star_density = 0.0591
-shader_parameter/star_brightness = 0.708
-shader_parameter/star_size = 1.489
-shader_parameter/twinkle_speed = 0.833
+shader_parameter/star_density = 0.0641
+shader_parameter/star_brightness = 0.234
+shader_parameter/star_size = 1.406
+shader_parameter/twinkle_speed = 0.0
 shader_parameter/world_offset = Vector2(0, 0)
 shader_parameter/tile_size = 200.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0t005"]
-shader = ExtResource("2_mx1rw")
-shader_parameter/star_density = 0.0401
-shader_parameter/star_brightness = 0.99
-shader_parameter/star_size = 1.64
-shader_parameter/twinkle_speed = 0.0
-shader_parameter/world_offset = Vector2(0, 0)
-shader_parameter/tile_size = 211.194
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mx1rw"]
 shader = ExtResource("2_mx1rw")
-shader_parameter/star_density = 0.1
-shader_parameter/star_brightness = 2.0
-shader_parameter/star_size = 1.997
-shader_parameter/twinkle_speed = 0.5
+shader_parameter/star_density = 0.0841
+shader_parameter/star_brightness = 0.5
+shader_parameter/star_size = 3.881
+shader_parameter/twinkle_speed = 0.0
 shader_parameter/world_offset = Vector2(0, 0)
-shader_parameter/tile_size = 500.0
+shader_parameter/tile_size = 200.0
 
-[node name="ParallaxStarfield" type="ParallaxBackground"]
-script = ExtResource("1_uikql")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uikql"]
+shader = ExtResource("2_mx1rw")
+shader_parameter/star_density = 0.0301
+shader_parameter/star_brightness = 0.7
+shader_parameter/star_size = 4.772
+shader_parameter/twinkle_speed = 0.0
+shader_parameter/world_offset = Vector2(0, 0)
+shader_parameter/tile_size = 200.0
 
-[node name="BackgroundLayer" type="ParallaxLayer" parent="."]
-motion_scale = Vector2(0, 0)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_65eys"]
+shader = ExtResource("2_mx1rw")
+shader_parameter/star_density = 0.0101
+shader_parameter/star_brightness = 1.294
+shader_parameter/star_size = 2.603
+shader_parameter/twinkle_speed = 0.0
+shader_parameter/world_offset = Vector2(0, 0)
+shader_parameter/tile_size = 50.0
 
-[node name="BackgroundRect" type="ColorRect" parent="BackgroundLayer"]
-offset_left = -2000.0
-offset_top = -2000.0
-offset_right = 2000.0
-offset_bottom = 2000.0
-color = Color(0, 0, 0, 1)
+[node name="ParallaxStarfield" type="Node"]
 
-[node name="StarLayer1" type="ParallaxLayer" parent="."]
-motion_scale = Vector2(0.1, 0.1)
-motion_mirroring = Vector2(8000, 8000)
+[node name="BaseColor" type="Parallax2D" parent="."]
+z_index = -100
+scroll_scale = Vector2(0, 0)
+repeat_size = Vector2(2048, 2048)
+repeat_times = 3
+
+[node name="ColorRect1" type="ColorRect" parent="BaseColor"]
+offset_left = -1024.0
+offset_top = -1024.0
+offset_right = 1024.0
+offset_bottom = 1024.0
+mouse_filter = 2
+color = Color(0.00375523, 0.0204223, 0.202831, 1)
+
+[node name="StarLayer4" type="Parallax2D" parent="."]
+z_index = -100
+scroll_scale = Vector2(0.1, 0.1)
+repeat_size = Vector2(2048, 2048)
+repeat_times = 3
+
+[node name="StarRect3" type="ColorRect" parent="StarLayer4"]
+material = SubResource("ShaderMaterial_obgmf")
+offset_left = -1024.0
+offset_top = -1024.0
+offset_right = 1024.0
+offset_bottom = 1024.0
+mouse_filter = 2
+
+[node name="StarLayer3" type="Parallax2D" parent="."]
+z_index = -100
+scroll_scale = Vector2(0.5, 0.5)
+repeat_size = Vector2(2048, 2048)
+repeat_times = 3
+
+[node name="StarRect3" type="ColorRect" parent="StarLayer3"]
+material = SubResource("ShaderMaterial_mx1rw")
+offset_left = -1024.0
+offset_top = -1024.0
+offset_right = 1024.0
+offset_bottom = 1024.0
+mouse_filter = 2
+
+[node name="StarLayer2" type="Parallax2D" parent="."]
+z_index = -100
+scroll_scale = Vector2(0.7, 0.7)
+repeat_size = Vector2(2048, 2048)
+repeat_times = 3
+
+[node name="StarRect2" type="ColorRect" parent="StarLayer2"]
+material = SubResource("ShaderMaterial_uikql")
+offset_left = -1024.0
+offset_top = -1024.0
+offset_right = 1024.0
+offset_bottom = 1024.0
+mouse_filter = 2
+
+[node name="StarLayer1" type="Parallax2D" parent="."]
+z_index = -100
+repeat_size = Vector2(2048, 2048)
+repeat_times = 3
 
 [node name="StarRect1" type="ColorRect" parent="StarLayer1"]
 material = SubResource("ShaderMaterial_65eys")
-offset_left = -4000.0
-offset_top = -4000.0
-offset_right = 4000.0
-offset_bottom = 4000.0
-mouse_filter = 2
-
-[node name="StarLayer2" type="ParallaxLayer" parent="."]
-visible = false
-motion_scale = Vector2(0.3, 0.3)
-motion_mirroring = Vector2(8000, 8000)
-
-[node name="StarRect2" type="ColorRect" parent="StarLayer2"]
-material = SubResource("ShaderMaterial_obgmf")
-offset_left = -4000.0
-offset_top = -4000.0
-offset_right = 4000.0
-offset_bottom = 4000.0
-mouse_filter = 2
-
-[node name="StarLayer3" type="ParallaxLayer" parent="."]
-motion_scale = Vector2(0.6, 0.6)
-motion_mirroring = Vector2(8000, 8000)
-
-[node name="StarRect3" type="ColorRect" parent="StarLayer3"]
-material = SubResource("ShaderMaterial_0t005")
-offset_left = -4000.0
-offset_top = -4000.0
-offset_right = 4000.0
-offset_bottom = 4000.0
-mouse_filter = 2
-
-[node name="StarLayer4" type="ParallaxLayer" parent="."]
-motion_mirroring = Vector2(8000, 8000)
-
-[node name="StarRect4" type="ColorRect" parent="StarLayer4"]
-material = SubResource("ShaderMaterial_mx1rw")
-offset_left = -4000.0
-offset_top = -4000.0
-offset_right = 4000.0
-offset_bottom = 4000.0
+offset_left = -1024.0
+offset_top = -1024.0
+offset_right = 1024.0
+offset_bottom = 1024.0
 mouse_filter = 2
