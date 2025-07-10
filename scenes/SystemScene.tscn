@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://bs2vv8mki25h1"]
+[gd_scene load_steps=4 format=3 uid="uid://bs2vv8mki25h1"]
 
 [ext_resource type="Script" uid="uid://cad4qvt1p5umk" path="res://scripts/SystemScene.gd" id="1_gy4ls"]
 [ext_resource type="PackedScene" uid="uid://drb0em1la86we" path="res://scenes/ParallaxStarfield.tscn" id="2_df3l7"]
+[ext_resource type="PackedScene" uid="uid://dd0glb4j2cxhj" path="res://scenes/PlanetGenerator.tscn" id="3_yc7ia"]
 
 [node name="SystemScene" type="Node2D"]
 script = ExtResource("1_gy4ls")
@@ -11,3 +12,27 @@ script = ExtResource("1_gy4ls")
 [node name="CelestialBodies" type="Node2D" parent="."]
 
 [node name="PlayerSpawn" type="Node2D" parent="."]
+
+[node name="PlanetGenerator" parent="." instance=ExtResource("3_yc7ia")]
+position = Vector2(402, 579)
+
+[node name="PlanetGenerator2" parent="." instance=ExtResource("3_yc7ia")]
+position = Vector2(1273, 458)
+
+[node name="PlanetGenerator3" parent="." instance=ExtResource("3_yc7ia")]
+position = Vector2(879, 913)
+
+[node name="PlanetGenerator4" parent="." instance=ExtResource("3_yc7ia")]
+position = Vector2(805, 303)
+
+[node name="PlanetGenerator5" parent="." instance=ExtResource("3_yc7ia")]
+position = Vector2(-312, 402)
+
+[node name="PlanetGenerator6" parent="." instance=ExtResource("3_yc7ia")]
+position = Vector2(328, 243)
+
+[node name="PlanetGenerator7" parent="." instance=ExtResource("3_yc7ia")]
+position = Vector2(-296, 1118)
+
+[node name="PlanetGenerator8" parent="." instance=ExtResource("3_yc7ia")]
+position = Vector2(423, 1319)
