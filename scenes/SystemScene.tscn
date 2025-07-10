@@ -15,24 +15,3 @@ script = ExtResource("1_gy4ls")
 
 [node name="PlanetGenerator" parent="." instance=ExtResource("3_yc7ia")]
 position = Vector2(402, 579)
-
-[node name="PlanetGenerator2" parent="." instance=ExtResource("3_yc7ia")]
-position = Vector2(1273, 458)
-
-[node name="PlanetGenerator3" parent="." instance=ExtResource("3_yc7ia")]
-position = Vector2(879, 913)
-
-[node name="PlanetGenerator4" parent="." instance=ExtResource("3_yc7ia")]
-position = Vector2(805, 303)
-
-[node name="PlanetGenerator5" parent="." instance=ExtResource("3_yc7ia")]
-position = Vector2(-312, 402)
-
-[node name="PlanetGenerator6" parent="." instance=ExtResource("3_yc7ia")]
-position = Vector2(328, 243)
-
-[node name="PlanetGenerator7" parent="." instance=ExtResource("3_yc7ia")]
-position = Vector2(-296, 1118)
-
-[node name="PlanetGenerator8" parent="." instance=ExtResource("3_yc7ia")]
-position = Vector2(423, 1319)
