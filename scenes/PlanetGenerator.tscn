@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://dd0glb4j2cxhj"]
+[gd_scene load_steps=16 format=3 uid="uid://dd0glb4j2cxhj"]
 
 [ext_resource type="Shader" uid="uid://beb07657c5c4m" path="res://shaders/PlanetShader_Stage2.gdshader" id="1_pvb80"]
 [ext_resource type="Shader" uid="uid://gvdujfexelxk" path="res://shaders/PlanetShader_Stage3.gdshader" id="2_hau3t"]
@@ -224,9 +224,9 @@ shader_parameter/variation_tint = Color(0.2, 0.5, 0.8, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_382nf"]
 shader = ExtResource("7_p7bx3")
-shader_parameter/planet_radius = 0.45
-shader_parameter/edge_softness = 0.01
-shader_parameter/uv_offset_x = 9.5e-08
+shader_parameter/planet_radius = 0.437
+shader_parameter/edge_softness = 0.0
+shader_parameter/uv_offset_x = -0.271
 shader_parameter/uv_offset_y = 9.5e-08
 shader_parameter/continent_seed = 42.0
 shader_parameter/terrain_seed = 123.0
@@ -235,7 +235,7 @@ shader_parameter/detail_seed = 789.0
 shader_parameter/output_mode = 0
 shader_parameter/normal_map_intensity = 0.1
 shader_parameter/sphere_strength = -1.25
-shader_parameter/light_direction = Vector2(0.3, 0.3)
+shader_parameter/light_direction = Vector2(1.08, 0.3)
 shader_parameter/light_intensity = 1.0
 shader_parameter/light_color = Color(1, 0.95, 0.8, 1)
 shader_parameter/ambient_light = 0.3
@@ -243,40 +243,97 @@ shader_parameter/ambient_color = Color(0.4, 0.6, 1, 1)
 shader_parameter/rim_light_intensity = 0.25
 shader_parameter/rim_light_color = Color(0.8, 0.9, 1, 1)
 shader_parameter/rim_light_falloff = 2.0
-shader_parameter/continent_scale = 3.0
-shader_parameter/continent_threshold = 0.5
-shader_parameter/continent_sharpness = 0.25
-shader_parameter/ocean_depth = 0.4
-shader_parameter/warp_strength = 0.15
-shader_parameter/warp_scale = 5.0
-shader_parameter/terrain_scale = 5.0
-shader_parameter/terrain_strength = 0.75
-shader_parameter/terrain_octaves = 3.0
-shader_parameter/terrain_persistence = 0.5
-shader_parameter/detail_scale = 8.0
-shader_parameter/detail_strength = 0.2
-shader_parameter/detail_octaves = 2.0
-shader_parameter/river_scale = 4.0
-shader_parameter/river_strength = 0.5
-shader_parameter/river_width = 0.05
-shader_parameter/ice_cap_size = 0.05
-shader_parameter/ice_cap_softness = 0.05
-shader_parameter/desert_latitude = 0.2
-shader_parameter/desert_width = 0.2
-shader_parameter/desert_intensity = 0.7
+shader_parameter/continent_scale = 4.3
+shader_parameter/continent_threshold = 0.488
+shader_parameter/continent_sharpness = 0.625
+shader_parameter/ocean_depth = 0.723
+shader_parameter/warp_strength = 0.515
+shader_parameter/warp_scale = 16.667
+shader_parameter/terrain_scale = 21.373
+shader_parameter/terrain_strength = 0.859
+shader_parameter/terrain_octaves = 10.521
+shader_parameter/terrain_persistence = 1.018
+shader_parameter/detail_scale = 10.156
+shader_parameter/detail_strength = 0.234
+shader_parameter/detail_octaves = 5.875
+shader_parameter/river_scale = 4.406
+shader_parameter/river_strength = 1.125
+shader_parameter/river_width = 0.33
+shader_parameter/ice_cap_size = 0.031
+shader_parameter/ice_cap_softness = 0.282
+shader_parameter/desert_latitude = 0.229
+shader_parameter/desert_width = 0.21
+shader_parameter/desert_intensity = 1.69
 shader_parameter/deep_ocean_color = Color(0.1, 0.2, 0.4, 1)
-shader_parameter/shallow_water_color = Color(0.2, 0.4, 0.6, 1)
-shader_parameter/river_color = Color(0.3, 0.5, 0.7, 1)
+shader_parameter/shallow_water_color = Color(0.638401, 0.173823, 0.453812, 1)
+shader_parameter/river_color = Color(0.854426, 0.129637, 0.524846, 1)
 shader_parameter/mountain_color = Color(0.5, 0.4, 0.3, 1)
-shader_parameter/highland_color = Color(0.3, 0.5, 0.2, 1)
-shader_parameter/lowland_color = Color(0.2, 0.6, 0.3, 1)
-shader_parameter/desert_color = Color(0.8, 0.6, 0.3, 1)
-shader_parameter/ice_color = Color(0.9, 0.95, 1, 1)
-shader_parameter/coastal_blend = 0.1
+shader_parameter/highland_color = Color(0.585406, 0.387999, 0.217123, 1)
+shader_parameter/lowland_color = Color(0.601065, 0.495117, 0.246254, 1)
+shader_parameter/desert_color = Color(0.878165, 0.528948, 0.520134, 1)
+shader_parameter/ice_color = Color(0.729548, 0.246992, 0.147922, 1)
+shader_parameter/coastal_blend = 0.089
 shader_parameter/beach_color = Color(0.7, 0.6, 0.4, 1)
 shader_parameter/core_color = Color(1, 0.8, 0.3, 1)
-shader_parameter/core_size = 0.5
-shader_parameter/color_variation = 0.1
+shader_parameter/core_size = 1.021
+shader_parameter/color_variation = 0.308
+shader_parameter/variation_tint = Color(0.2, 0.5, 0.8, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jm2to"]
+shader = ExtResource("7_p7bx3")
+shader_parameter/planet_radius = 0.452
+shader_parameter/edge_softness = 0.0
+shader_parameter/uv_offset_x = 0.0
+shader_parameter/uv_offset_y = 0.0
+shader_parameter/continent_seed = 42.0
+shader_parameter/terrain_seed = 123.0
+shader_parameter/river_seed = 456.0
+shader_parameter/detail_seed = 789.0
+shader_parameter/output_mode = 0
+shader_parameter/normal_map_intensity = 0.03
+shader_parameter/sphere_strength = -1.25
+shader_parameter/light_direction = Vector2(-1.635, -0.705)
+shader_parameter/light_intensity = 1.175
+shader_parameter/light_color = Color(0.781867, 0.8, 0.736, 1)
+shader_parameter/ambient_light = 0.358
+shader_parameter/ambient_color = Color(0.479664, 0.594269, 0.941157, 1)
+shader_parameter/rim_light_intensity = 1.624
+shader_parameter/rim_light_color = Color(0.8, 0.9, 1, 1)
+shader_parameter/rim_light_falloff = 2.435
+shader_parameter/continent_scale = 1.246
+shader_parameter/continent_threshold = 0.482
+shader_parameter/continent_sharpness = 0.204
+shader_parameter/ocean_depth = 0.796
+shader_parameter/warp_strength = 0.789
+shader_parameter/warp_scale = 12.029
+shader_parameter/terrain_scale = 17.754
+shader_parameter/terrain_strength = 0.827
+shader_parameter/terrain_octaves = 5.064
+shader_parameter/terrain_persistence = 0.818
+shader_parameter/detail_scale = 7.655
+shader_parameter/detail_strength = 0.246
+shader_parameter/detail_octaves = 3.917
+shader_parameter/river_scale = 2.415
+shader_parameter/river_strength = 0.807
+shader_parameter/river_width = 0.33
+shader_parameter/ice_cap_size = 0.048
+shader_parameter/ice_cap_softness = 0.237
+shader_parameter/desert_latitude = 0.302
+shader_parameter/desert_width = 0.182
+shader_parameter/desert_intensity = 1.099
+shader_parameter/deep_ocean_color = Color(0.1, 0.2, 0.4, 1)
+shader_parameter/shallow_water_color = Color(0.2, 0.4, 0.6, 1)
+shader_parameter/river_color = Color(0.2408, 0.4004, 0.56, 1)
+shader_parameter/mountain_color = Color(0.565736, 0.135162, 0.485968, 1)
+shader_parameter/highland_color = Color(0.584104, 0.387791, 0.230996, 1)
+shader_parameter/lowland_color = Color(0.797355, 0.324123, 0.452044, 1)
+shader_parameter/desert_color = Color(0.565441, 0.667341, 0.636387, 1)
+shader_parameter/ice_color = Color(0.736145, 0.695244, 0.260173, 1)
+shader_parameter/coastal_blend = 0.068
+shader_parameter/beach_color = Color(0.49064, 0.646498, 0.662551, 1)
+shader_parameter/core_color = Color(1, 0.8, 0.3, 1)
+shader_parameter/core_size = 0.915
+shader_parameter/color_variation = 0.296
 shader_parameter/variation_tint = Color(0.2, 0.5, 0.8, 1)
 
 [node name="PlanetGenerator" type="Node2D"]
@@ -325,7 +382,105 @@ offset_bottom = 128.0
 
 [node name="ColorRect7" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_382nf")
-offset_left = 1274.0
-offset_top = -128.0
-offset_right = 1530.0
-offset_bottom = 128.0
+offset_left = 1730.0
+offset_top = 3585.0
+offset_right = 5826.0
+offset_bottom = 7681.0
+
+[node name="ColorRect17" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_382nf")
+offset_left = -7621.0
+offset_top = 8946.0
+offset_right = -3525.0
+offset_bottom = 13042.0
+
+[node name="ColorRect18" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_382nf")
+offset_left = -8943.0
+offset_top = -5517.0
+offset_right = -4847.0
+offset_bottom = -1421.0
+
+[node name="ColorRect19" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_382nf")
+offset_left = 5271.0
+offset_top = -8260.0
+offset_right = 9367.0
+offset_bottom = -4164.0
+
+[node name="ColorRect13" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_382nf")
+offset_left = 8444.0
+offset_top = 6048.0
+offset_right = 12540.0
+offset_bottom = 10144.0
+
+[node name="ColorRect14" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_382nf")
+offset_left = 10823.0
+offset_top = -2186.0
+offset_right = 14919.0
+offset_bottom = 1910.0
+
+[node name="ColorRect8" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_jm2to")
+offset_left = 1637.0
+offset_top = -131.0
+offset_right = 1893.0
+offset_bottom = 125.0
+
+[node name="ColorRect9" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_jm2to")
+offset_left = 1957.0
+offset_top = -129.0
+offset_right = 2469.0
+offset_bottom = 383.0
+
+[node name="ColorRect10" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_jm2to")
+offset_left = 2629.0
+offset_top = -77.0
+offset_right = 3653.0
+offset_bottom = 947.0
+
+[node name="ColorRect11" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_jm2to")
+offset_left = 3784.0
+offset_top = -7.0
+offset_right = 5832.0
+offset_bottom = 2041.0
+
+[node name="ColorRect12" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_jm2to")
+offset_left = 5978.0
+offset_top = 1.0
+offset_right = 10074.0
+offset_bottom = 4097.0
+
+[node name="ColorRect20" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_jm2to")
+offset_left = -4944.0
+offset_top = 2669.0
+offset_right = -848.0
+offset_bottom = 6765.0
+
+[node name="ColorRect21" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_jm2to")
+offset_left = 11713.0
+offset_top = 12519.0
+offset_right = 15809.0
+offset_bottom = 16615.0
+
+[node name="ColorRect15" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_jm2to")
+offset_left = 2262.0
+offset_top = 12145.0
+offset_right = 6358.0
+offset_bottom = 16241.0
+
+[node name="ColorRect16" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_jm2to")
+offset_left = -10431.0
+offset_top = 3467.0
+offset_right = -6335.0
+offset_bottom = 7563.0
