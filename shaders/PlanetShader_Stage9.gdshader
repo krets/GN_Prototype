@@ -84,7 +84,7 @@ uniform float cloud_coverage : hint_range(0.0, 1.0) = 0.4;
 uniform float cloud_scale : hint_range(0.5, 20.0) = 4.0;
 uniform float cloud_stretch_x : hint_range(0.1, 5.0) = 1.0;
 uniform float cloud_stretch_y : hint_range(0.1, 5.0) = 1.0;
-uniform float cloud_octaves : hint_range(1, 6) = 3;
+uniform float cloud_octaves : hint_range(1, 20) = 3;
 uniform float cloud_persistence : hint_range(0.1, 1.0) = 0.5;
 uniform float cloud_density : hint_range(0.0, 2.0) = 0.8;
 uniform float cloud_sharpness : hint_range(0.01, 0.5) = 0.1;
@@ -104,7 +104,7 @@ uniform float cloud_offset_y : hint_range(-2.0, 2.0) = 0.0;
 uniform float river_scale : hint_range(2.0, 15.0) = 0.5;
 uniform float river_strength : hint_range(0.0, 3) = 0.05;
 uniform float river_width : hint_range(0.01, 2) = 0.05;
-uniform float river_octaves : hint_range(1, 6) = 2;
+uniform float river_octaves : hint_range(1, 20) = 2;
 uniform float river_persistence : hint_range(0.1, 1.0) = 0.5;
 
 // Polar ice caps
