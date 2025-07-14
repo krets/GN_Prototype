@@ -4,7 +4,7 @@
 	  "name": "Sol System",
 	  "description": "The birthplace of humanity",
 	  "background": "res://backgrounds/sol_nebula.png",
-	  "connections": ["alpha_centauri"],
+	  "connections": ["alpha_centauri", "vega_system"],
 	  "starfield": {
 		"layer_count": 3,
 		"base_density": 150,
@@ -74,7 +74,7 @@
 	  "name": "Alpha Centauri System",
 	  "description": "Humanity's first interstellar colony",
 	  "background": "res://backgrounds/alpha_centauri_nebula.png",
-	  "connections": ["sol_system"],
+	  "connections": ["sol_system", "sirius_system", "rigel_system"],
 	  "starfield": {
 		"layer_count": 5,
 		"base_density": 200,
@@ -125,6 +125,192 @@
 		  "government": "confederation",
 		  "tech_level": 6,
 		  "population": 5000
+		}
+	  ]
+	},
+	"vega_system": {
+	  "name": "Vega System",
+	  "description": "A frontier trading hub",
+	  "connections": ["sol_system", "arcturus_system", "capella_system"],
+	  "celestial_bodies": [
+		{
+		  "id": "vega_prime",
+		  "name": "Vega Prime",
+		  "type": "planet",
+		  "description": "A rocky mining world",
+		  "position": { "x": 400, "y": 200 },
+		  "sprite": "res://sprites/planets/earth.png",
+		  "can_land": true,
+		  "services": ["outfitter", "commodity_exchange"],
+		  "government": "independent",
+		  "tech_level": 3,
+		  "population": 2000000
+		},
+		{
+		  "id": "vega_station",
+		  "name": "Vega Outpost",
+		  "type": "station",
+		  "description": "A small trading station",
+		  "position": { "x": -300, "y": -100 },
+		  "sprite": "res://sprites/stations/mining_station.png",
+		  "can_land": true,
+		  "services": ["commodity_exchange", "bar"],
+		  "government": "independent",
+		  "tech_level": 3,
+		  "population": 15000
+		}
+	  ]
+	},
+	"sirius_system": {
+	  "name": "Sirius System",
+	  "description": "A wealthy commercial system",
+	  "connections": ["alpha_centauri", "aldebaran_system"],
+	  "celestial_bodies": [
+		{
+		  "id": "sirius_major",
+		  "name": "Sirius Major",
+		  "type": "planet",
+		  "description": "A prosperous trade world",
+		  "position": { "x": -200, "y": 400 },
+		  "sprite": "res://sprites/planets/earth.png",
+		  "can_land": true,
+		  "services": ["shipyard", "outfitter", "commodity_exchange", "mission_computer"],
+		  "government": "confederation",
+		  "tech_level": 5,
+		  "population": 150000000
+		}
+	  ]
+	},
+	"rigel_system": {
+	  "name": "Rigel System",
+	  "description": "An industrial manufacturing center",
+	  "connections": ["alpha_centauri", "antares_system", "aldebaran_system"],
+	  "celestial_bodies": [
+		{
+		  "id": "rigel_forge",
+		  "name": "Rigel Forge",
+		  "type": "station",
+		  "description": "A massive shipbuilding facility",
+		  "position": { "x": 0, "y": 0 },
+		  "sprite": "res://sprites/stations/jump_gate.png",
+		  "can_land": true,
+		  "services": ["shipyard", "outfitter"],
+		  "government": "confederation",
+		  "tech_level": 6,
+		  "population": 500000
+		},
+		{
+		  "id": "rigel_beta",
+		  "name": "Rigel Beta",
+		  "type": "planet",
+		  "description": "An industrial world",
+		  "position": { "x": 600, "y": -300 },
+		  "sprite": "res://sprites/planets/mars.png",
+		  "can_land": true,
+		  "services": ["commodity_exchange", "mission_computer"],
+		  "government": "confederation",
+		  "tech_level": 4,
+		  "population": 80000000
+		}
+	  ]
+	},
+	"arcturus_system": {
+	  "name": "Arcturus System",
+	  "description": "A quiet research system",
+	  "connections": ["vega_system", "capella_system", "deneb_system"],
+	  "celestial_bodies": [
+		{
+		  "id": "arcturus_lab",
+		  "name": "Arcturus Research Lab",
+		  "type": "station",
+		  "description": "Advanced scientific research facility",
+		  "position": { "x": -400, "y": 200 },
+		  "sprite": "res://sprites/stations/research_station.png",
+		  "can_land": true,
+		  "services": ["outfitter", "bar"],
+		  "government": "confederation",
+		  "tech_level": 7,
+		  "population": 25000
+		}
+	  ]
+	},
+	"deneb_system": {
+	  "name": "Deneb System",
+	  "description": "A remote frontier outpost",
+	  "connections": ["arcturus_system", "capella_system", "antares_system"],
+	  "celestial_bodies": [
+		{
+		  "id": "deneb_outpost",
+		  "name": "Deneb Frontier Post",
+		  "type": "station",
+		  "description": "The edge of known space",
+		  "position": { "x": 300, "y": 300 },
+		  "sprite": "res://sprites/stations/mining_station.png",
+		  "can_land": true,
+		  "services": ["commodity_exchange", "bar"],
+		  "government": "independent",
+		  "tech_level": 2,
+		  "population": 8000
+		}
+	  ]
+	},
+	"aldebaran_system": {
+	  "name": "Aldebaran System",
+	  "description": "A strategic military system",
+	  "connections": ["sirius_system", "rigel_system"],
+	  "celestial_bodies": [
+		{
+		  "id": "aldebaran_base",
+		  "name": "Aldebaran Naval Base",
+		  "type": "station",
+		  "description": "Confederation military headquarters",
+		  "position": { "x": 0, "y": -400 },
+		  "sprite": "res://sprites/stations/jump_gate.png",
+		  "can_land": true,
+		  "services": ["shipyard", "outfitter", "mission_computer"],
+		  "government": "confederation",
+		  "tech_level": 6,
+		  "population": 200000
+		}
+	  ]
+	},
+	"antares_system": {
+	  "name": "Antares System",
+	  "description": "A dangerous pirate haven",
+	  "connections": ["rigel_system", "deneb_system"],
+	  "celestial_bodies": [
+		{
+		  "id": "antares_hideout",
+		  "name": "Freeport Antares",
+		  "type": "station",
+		  "description": "A lawless trading post",
+		  "position": { "x": 500, "y": 100 },
+		  "sprite": "res://sprites/stations/mining_station.png",
+		  "can_land": true,
+		  "services": ["outfitter", "commodity_exchange", "bar"],
+		  "government": "independent",
+		  "tech_level": 3,
+		  "population": 50000
+		}
+	  ]
+	},
+	"capella_system": {
+	  "name": "Capella System",
+	  "description": "An agricultural supply system",
+	  "connections": ["vega_system", "arcturus_system", "deneb_system"],
+	  "celestial_bodies": [
+		{
+		  "id": "capella_farms",
+		  "name": "Capella Agricultural Station",
+		  "type": "station",
+		  "description": "Food production for the frontier",
+		  "position": { "x": -200, "y": -200 },
+		  "sprite": "res://sprites/stations/mining_station.png",
+		  "can_land": true,
+		  "services": ["commodity_exchange", "bar"],
+		  "government": "confederation",
+		  "tech_level": 4,
+		  "population": 75000
 		}
 	  ]
 	}
