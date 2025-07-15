@@ -7,6 +7,8 @@ extends Control
 @onready var info_label = $InfoPanel/VBox/InfoLabel
 @onready var jump_button = $InfoPanel/VBox/JumpButton
 @onready var cancel_button = $InfoPanel/VBox/CancelButton
+@onready var flavor_panel = $FlavorPanel
+@onready var flavor_label = $FlavorPanel/FlavorLabel
 
 var systems_data: Dictionary = {}
 var system_positions: Dictionary = {}
@@ -15,13 +17,12 @@ var selected_system: String = ""
 var current_system: String = ""
 
 # Visual settings - retro DOS green theme
-var bg_color = Color(0.0, 0.2, 0.0, 0.85)  # Dark green with 75% transparency
-var line_color = Color(0.0, 0.8, 0.0, 1.0)  # Bright green
-var system_color = Color(0.0, 1.0, 0.0, 1.0)  # Bright green
-var current_system_color = Color(1.0, 1.0, 0.0, 1.0)  # Yellow
-var selected_system_color = Color(1.0, 0.5, 0.0, 1.0)  # Orange
-var unavailable_color = Color(0.3, 0.3, 0.3, 1.0)  # Dark gray
-
+var bg_color = Color(0.0, 0.2, 0.0, 0.50)  # Dark green with 75% transparency
+var line_color = Color(0.0, 0.4, 0.0, 1.0)  # Bright green
+var system_color = Color(0.0, 0.7, 0.0, 1.0)  # Bright green
+var current_system_color = Color(0.0, 1.0, 0.0, 1.0)  # Yellow
+var selected_system_color = Color(0.0, 1.0, 0.0, 1.0)  # Orange
+var unavailable_color = Color(0.0, 0.3, 0.0, 1.0)  # Dark gray
 var system_radius = 8.0
 var line_width = 2.0
 
@@ -29,6 +30,13 @@ func _ready():
 	# Don't force full rect - let the parent control the size
 	setup_systems()
 	current_system = UniverseManager.current_system_id
+	
+	# Debug: Check if nodes are found
+	print("InfoPanel found: ", $InfoPanel != null)
+	print("FlavorPanel found: ", $FlavorPanel != null)
+	if $FlavorPanel != null:
+		print("FlavorLabel found: ", $FlavorPanel.get_node("FlavorLabel") != null)
+	
 	jump_button.pressed.connect(_on_jump_pressed)
 	cancel_button.pressed.connect(_on_cancel_pressed)
 	update_ui()
@@ -143,18 +151,38 @@ func select_system(system_id: String):
 
 func update_ui():
 	"""Update the info panel based on current selection"""
+	var flavor_text = ""
+	
 	if selected_system == "":
 		info_label.text = "Select a destination system"
 		jump_button.disabled = true
+		flavor_text = "Navigate the galaxy using the hyperspace network. Click on connected systems to plan your route."
 	elif selected_system == current_system:
 		info_label.text = "Current location: " + get_system_name(selected_system)
 		jump_button.disabled = true
+		flavor_text = get_system_flavor(selected_system)
 	elif can_travel_to(selected_system):
 		info_label.text = "Jump to: " + get_system_name(selected_system)
 		jump_button.disabled = false
+		flavor_text = get_system_flavor(selected_system)
 	else:
 		info_label.text = get_system_name(selected_system) + " - Not accessible"
 		jump_button.disabled = true
+		flavor_text = get_system_flavor(selected_system)
+	
+	# Set flavor text with debug
+	if flavor_label != null:
+		flavor_label.text = flavor_text
+		print("Setting flavor text: ", flavor_text)
+	else:
+		print("ERROR: flavor_label is null!")
+
+func get_system_flavor(system_id: String) -> String:
+	"""Get the flavor text for a system"""
+	var system_data = systems_data.get(system_id, {})
+	var flavor = system_data.get("flavor_text", "No information available about this system.")
+	print("Getting flavor for ", system_id, ": ", flavor)
+	return flavor
 
 func get_system_name(system_id: String) -> String:
 	return systems_data.get(system_id, {}).get("name", system_id)
@@ -179,15 +207,36 @@ func show_map():
 	# Recalculate system positions based on current size
 	setup_systems()
 	
-	# Position info panel relative to this control's size
+	# Position panels relative to this control's size
 	var control_size = size
 	var panel_width = 300
-	var panel_height = 150
-	var info_panel = $InfoPanel
+	var info_panel_height = 120
+	var flavor_panel_height = 150
+	var panel_spacing = 10
+	var margin = 20
 	
-	# Position in bottom right corner of THIS control, not the viewport
-	info_panel.position = Vector2(control_size.x - panel_width - 20, control_size.y - panel_height - 20)
-	info_panel.size = Vector2(panel_width, panel_height)
+	# Get panel references
+	var info_panel = $InfoPanel
+	var flavor_panel = $FlavorPanel
+	
+	# Calculate positions from bottom-right corner
+	var info_panel_x = control_size.x - panel_width - margin
+	var info_panel_y = control_size.y - info_panel_height - margin
+	
+	var flavor_panel_x = control_size.x - panel_width - margin  
+	var flavor_panel_y = info_panel_y - flavor_panel_height - panel_spacing
+	
+	# Position info panel at bottom right
+	info_panel.position = Vector2(info_panel_x, info_panel_y)
+	info_panel.size = Vector2(panel_width, info_panel_height)
+	
+	# Position flavor panel above info panel
+	flavor_panel.position = Vector2(flavor_panel_x, flavor_panel_y)
+	flavor_panel.size = Vector2(panel_width, flavor_panel_height)
+	
+	print("Control size: ", control_size)
+	print("Info panel pos: ", info_panel.position, " size: ", info_panel.size)
+	print("Flavor panel pos: ", flavor_panel.position, " size: ", flavor_panel.size)
 	
 	current_system = UniverseManager.current_system_id
 	selected_system = ""

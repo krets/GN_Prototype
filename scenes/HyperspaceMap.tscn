@@ -1,6 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://dx1xspawun6rt"]
+[gd_scene load_steps=4 format=3 uid="uid://dx1xspawun6rt"]
 
 [ext_resource type="Script" uid="uid://din31j8ene7cm" path="res://scripts/HyperspaceMap.gd" id="1_8ufwo"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g0xmr"]
+bg_color = Color(0, 0, 0, 0.52549)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8ufwo"]
+bg_color = Color(0, 0, 0, 0.52549)
 
 [node name="HyperspaceMap" type="Control"]
 layout_mode = 3
@@ -15,6 +21,7 @@ offset_left = 500.0
 offset_top = 450.0
 offset_right = 800.0
 offset_bottom = 600.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_g0xmr")
 
 [node name="VBox" type="VBoxContainer" parent="InfoPanel"]
 layout_mode = 1
@@ -35,3 +42,22 @@ text = "JUMP"
 [node name="CancelButton" type="Button" parent="InfoPanel/VBox"]
 layout_mode = 2
 text = "CANCEL"
+
+[node name="FlavorPanel" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 500.0
+offset_top = 500.0
+offset_right = 800.0
+offset_bottom = 650.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_8ufwo")
+
+[node name="FlavorLabel" type="Label" parent="FlavorPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_font_sizes/font_size = 14
+autowrap_mode = 3

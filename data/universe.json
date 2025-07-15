@@ -3,6 +3,7 @@
 	"sol_system": {
 	  "name": "Sol System",
 	  "description": "The birthplace of humanity",
+	  "flavor_text": "Home to billions of humans across multiple worlds and stations. This system represents the heart of human civilization, where Earth's blue oceans still sparkle alongside the red deserts of terraformed Mars.",
 	  "background": "res://backgrounds/sol_nebula.png",
 	  "connections": ["alpha_centauri", "vega_system"],
 	  "starfield": {
@@ -73,6 +74,7 @@
 	"alpha_centauri": {
 	  "name": "Alpha Centauri System",
 	  "description": "Humanity's first interstellar colony",
+	  "flavor_text": "The first stepping stone beyond Sol, this system buzzes with the energy of pioneers and explorers. New Geneva orbits Proxima Centauri as a testament to human determination to spread among the stars.",
 	  "background": "res://backgrounds/alpha_centauri_nebula.png",
 	  "connections": ["sol_system", "sirius_system", "rigel_system"],
 	  "starfield": {
@@ -131,6 +133,7 @@
 	"vega_system": {
 	  "name": "Vega System",
 	  "description": "A frontier trading hub",
+	  "flavor_text": "Rough miners and independent traders call this system home, drawn by rich mineral deposits and minimal government oversight. The bright blue-white star Vega illuminates a hardscrabble frontier where fortunes are made and lost daily.",
 	  "connections": ["sol_system", "arcturus_system", "capella_system"],
 	  "celestial_bodies": [
 		{
@@ -164,6 +167,7 @@
 	"sirius_system": {
 	  "name": "Sirius System",
 	  "description": "A wealthy commercial system",
+	  "flavor_text": "The brightest star in Earth's night sky hosts one of humanity's most prosperous worlds. Corporate executives and luxury merchants conduct business beneath the brilliant white light of this binary star system.",
 	  "connections": ["alpha_centauri", "aldebaran_system"],
 	  "celestial_bodies": [
 		{
@@ -184,6 +188,7 @@
 	"rigel_system": {
 	  "name": "Rigel System",
 	  "description": "An industrial manufacturing center",
+	  "flavor_text": "Massive shipyards orbit this blue supergiant star, churning out vessels for the Confederation fleet. The constant hammering of construction echoes through space as Rigel Forge works around the clock.",
 	  "connections": ["alpha_centauri", "antares_system", "aldebaran_system"],
 	  "celestial_bodies": [
 		{
@@ -217,6 +222,7 @@
 	"arcturus_system": {
 	  "name": "Arcturus System",
 	  "description": "A quiet research system",
+	  "flavor_text": "Scientists and researchers pursue cutting-edge discoveries in the serene environment around this ancient red giant star. The system's isolation makes it perfect for sensitive experiments that require minimal interference.",
 	  "connections": ["vega_system", "capella_system", "deneb_system"],
 	  "celestial_bodies": [
 		{
@@ -237,6 +243,7 @@
 	"deneb_system": {
 	  "name": "Deneb System",
 	  "description": "A remote frontier outpost",
+	  "flavor_text": "On the very edge of known space, this distant white supergiant marks the boundary of human exploration. Only the most adventurous traders and explorers brave the long journey to this isolated outpost.",
 	  "connections": ["arcturus_system", "capella_system", "antares_system"],
 	  "celestial_bodies": [
 		{
@@ -257,6 +264,7 @@
 	"aldebaran_system": {
 	  "name": "Aldebaran System",
 	  "description": "A strategic military system",
+	  "flavor_text": "The Confederation's military might is on full display in this heavily fortified system around the orange giant star. Patrol fleets launch regularly from the naval base to maintain order throughout human space.",
 	  "connections": ["sirius_system", "rigel_system"],
 	  "celestial_bodies": [
 		{
@@ -277,6 +285,7 @@
 	"antares_system": {
 	  "name": "Antares System",
 	  "description": "A dangerous pirate haven",
+	  "flavor_text": "This red supergiant system attracts smugglers, pirates, and others who prefer to operate outside the law. Confederation patrols are few and far between, making it a haven for the galaxy's most wanted.",
 	  "connections": ["rigel_system", "deneb_system"],
 	  "celestial_bodies": [
 		{
@@ -297,6 +306,7 @@
 	"capella_system": {
 	  "name": "Capella System",
 	  "description": "An agricultural supply system",
+	  "flavor_text": "Vast hydroponic farms and agricultural stations orbit this yellow giant star, feeding the growing population of human space. The system's peaceful nature and abundant food production make it a crucial link in the supply chain.",
 	  "connections": ["vega_system", "arcturus_system", "deneb_system"],
 	  "celestial_bodies": [
 		{
