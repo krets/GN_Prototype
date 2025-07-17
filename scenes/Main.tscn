@@ -1,9 +1,57 @@
-[gd_scene load_steps=5 format=3 uid="uid://bxvy6rfv2kbi4"]
+[gd_scene load_steps=7 format=3 uid="uid://bxvy6rfv2kbi4"]
 
 [ext_resource type="PackedScene" uid="uid://bs2vv8mki25h1" path="res://scenes/SystemScene.tscn" id="1_rvslj"]
 [ext_resource type="PackedScene" uid="uid://el1ywym68otq" path="res://scenes/PlayerShip.tscn" id="2_0bbpv"]
 [ext_resource type="Script" uid="uid://uojwd2ka5uy1" path="res://scripts/UIController.gd" id="3_0bbpv"]
 [ext_resource type="PackedScene" uid="uid://dx1xspawun6rt" path="res://scenes/HyperspaceMap.tscn" id="4_rarhs"]
+[ext_resource type="Shader" uid="uid://bsknlb2w31ea3" path="res://shaders/nebulaShader_Stage07.gdshader" id="5_vcsgt"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c01mt"]
+shader = ExtResource("5_vcsgt")
+shader_parameter/base_scale = 3.051
+shader_parameter/base_density = 0.657
+shader_parameter/base_softness = 0.431
+shader_parameter/base_octaves = 6.0
+shader_parameter/base_lacunarity = 2.735
+shader_parameter/base_gain = 0.531
+shader_parameter/structure_scale = 8.547
+shader_parameter/structure_strength = 0.763
+shader_parameter/structure_contrast = 1.222
+shader_parameter/structure_octaves = 6.0
+shader_parameter/structure_lacunarity = 1.895
+shader_parameter/structure_gain = 0.478
+shader_parameter/wispy_scale = 8.0
+shader_parameter/wispy_strength = 0.474
+shader_parameter/wispy_octaves = 6.0
+shader_parameter/wispy_lacunarity = 2.058
+shader_parameter/wispy_gain = 0.528
+shader_parameter/edge_falloff = 1.702
+shader_parameter/edge_irregularity = 4.245
+shader_parameter/hard_edge_mix = 0.0
+shader_parameter/nebula_base_color = Color(0.222, 0.6, 0.3291, 1)
+shader_parameter/structure_color = Color(0.8, 0.3884, 0.296, 1)
+shader_parameter/wispy_color = Color(0.297, 0.76935, 0.9, 1)
+shader_parameter/edge_color = Color(0.3, 0.8, 0.2, 1)
+shader_parameter/color_blend_smoothness = 0.741
+shader_parameter/overall_brightness = 0.628
+shader_parameter/star_density = 0.475
+shader_parameter/star_scale = 1.835
+shader_parameter/star_brightness = 2.475
+shader_parameter/star_size_variation = 0.186
+shader_parameter/cluster_scale = 7.066
+shader_parameter/cluster_strength = 0.0
+shader_parameter/scatter_randomness = 1.0
+shader_parameter/star_organic_mask_scale = 4.587
+shader_parameter/star_organic_mask_strength = 0.0
+shader_parameter/star_core_size = 0.522
+shader_parameter/star_core_color = Color(1, 0.9, 0.8, 1)
+shader_parameter/star_glow_size = 2.757
+shader_parameter/star_glow_intensity = 0.177
+shader_parameter/star_glow_softness = 2.965
+shader_parameter/star_glow_color = Color(0.8, 0.6, 1, 1)
+shader_parameter/star_glow_blend_mode = 1.317
+shader_parameter/star_nebula_interaction = 0.312
+shader_parameter/star_blend_mode = 0.0
 
 [node name="Main" type="Node2D"]
 
@@ -33,3 +81,16 @@ offset_right = 0.0
 offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Parallax2D" type="Parallax2D" parent="."]
+z_index = -99
+scroll_scale = Vector2(0.1, 0.1)
+
+[node name="Nebula07" type="ColorRect" parent="Parallax2D"]
+z_index = -90
+material = SubResource("ShaderMaterial_c01mt")
+offset_left = -2950.0
+offset_top = -3102.0
+offset_right = 5146.0
+offset_bottom = 4994.0
+pivot_offset = Vector2(1024, 1024)

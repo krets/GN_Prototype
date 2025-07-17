@@ -151,6 +151,7 @@ mouse_filter = 2
 color = Color(0.000829521, 0.00451328, 0.0823368, 1)
 
 [node name="BaseColor2" type="Parallax2D" parent="."]
+visible = false
 z_index = -100
 scroll_scale = Vector2(0, 0)
 
@@ -163,6 +164,7 @@ offset_bottom = 4994.0
 pivot_offset = Vector2(1024, 1024)
 
 [node name="BaseColor3" type="Parallax2D" parent="."]
+visible = false
 z_index = -100
 scroll_scale = Vector2(0.3, 0.3)
 
@@ -175,6 +177,7 @@ offset_bottom = 4994.0
 pivot_offset = Vector2(1024, 1024)
 
 [node name="BaseColor4" type="Parallax2D" parent="."]
+visible = false
 z_index = -100
 scroll_scale = Vector2(0.5, 0.5)
 scroll_offset = Vector2(1, -6)
