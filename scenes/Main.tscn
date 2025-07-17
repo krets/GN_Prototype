@@ -83,6 +83,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Parallax2D" type="Parallax2D" parent="."]
+visible = false
 z_index = -99
 scroll_scale = Vector2(0.1, 0.1)
 
