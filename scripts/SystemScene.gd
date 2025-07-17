@@ -1,5 +1,5 @@
 # =============================================================================
-# UPDATED SYSTEMSCENE.GD - Replace your existing SystemScene.gd with this
+# SYSTEM SCENE - Fixed camera positioning during transitions
 # =============================================================================
 # SystemScene.gd
 extends Node2D
@@ -19,17 +19,26 @@ func setup_system(system_data: Dictionary):
 	clear_system()
 	spawn_celestial_bodies(system_data.get("celestial_bodies", []))
 	
-	# Spawn player at designated location
+	# Only position player at spawn if it's not a hyperspace transition
 	var player = UniverseManager.player_ship
 	if player and player_spawn:
-		player.global_position = player_spawn.global_position
-		player.linear_velocity = Vector2.ZERO
-		player.angular_velocity = 0.0
+		# Check if player is in hyperspace sequence
+		if player.hyperspace_state == player.HyperspaceState.NORMAL:
+			# Normal spawn (e.g., game start)
+			player.global_position = player_spawn.global_position
+			player.linear_velocity = Vector2.ZERO
+			player.angular_velocity = 0.0
+			
+			# Force camera update
+			var camera = player.get_node("Camera2D")
+			if camera:
+				camera.global_position = player.global_position
+				camera.force_update_scroll()
+		# If in hyperspace, let the player ship handle its own positioning
 
 func clear_system():
 	for child in celestial_bodies_container.get_children():
 		child.queue_free()
-
 
 func spawn_celestial_bodies(bodies_data: Array):
 	for body_data in bodies_data:

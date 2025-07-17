@@ -8,15 +8,16 @@ class_name PlayerShip
 @export var thrust_power: float = 500.0
 @export var rotation_speed: float = 3.0
 @export var max_velocity: float = 400.0
-@export var hyperspace_thrust_power: float = 1500.0  # Much stronger thrust for hyperspace
-@export var hyperspace_entry_speed: float = 800.0   # Speed when entering new system
+@export var hyperspace_thrust_power: float = 1500.0
+@export var hyperspace_entry_speed: float = 800.0
 
 @onready var sprite = $Sprite2D
 @onready var engine_particles = $EngineParticles
 @onready var interaction_area = $InteractionArea
+@onready var camera = $Camera2D
 
 var current_target: Node = null
-var flash_overlay: ColorRect  # Created dynamically
+var flash_overlay: ColorRect
 
 # Hyperspace sequence states
 enum HyperspaceState {
@@ -39,11 +40,12 @@ var hyperspace_timer: float = 0.0
 var target_rotation: float = 0.0
 var acceleration_timer: float = 0.0
 var flash_timer: float = 0.0
-var rotation_timer: float = 0.0  # Track rotation phase time
-var deceleration_timer: float = 0.0  # Track deceleration phase time
+var rotation_timer: float = 0.0
+var deceleration_timer: float = 0.0
 var entry_position: Vector2 = Vector2.ZERO
 var entry_target: Vector2 = Vector2.ZERO
-var jump_direction: Vector2 = Vector2.ZERO  # Direction ship was traveling during jump
+var jump_direction: Vector2 = Vector2.ZERO
+var map_direction: Vector2 = Vector2.ZERO  # Store the direction from the map
 
 func _ready():
 	UniverseManager.player_ship = self
@@ -54,7 +56,6 @@ func _ready():
 	create_flash_overlay()
 
 func _integrate_forces(state):
-	# Only handle normal input if not in hyperspace sequence
 	if hyperspace_state == HyperspaceState.NORMAL:
 		handle_input(state)
 	else:
@@ -79,6 +80,10 @@ func handle_hyperspace_sequence(state):
 	"""Handle ship behavior during hyperspace sequence"""
 	hyperspace_timer += get_physics_process_delta_time()
 	
+	# Force camera to stay locked during hyperspace
+	if camera:
+		camera.global_position = global_position
+	
 	match hyperspace_phase:
 		HyperspacePhase.DECELERATION:
 			handle_deceleration_phase(state)
@@ -92,35 +97,38 @@ func handle_hyperspace_sequence(state):
 			handle_entry_phase(state)
 
 func handle_deceleration_phase(state):
-	"""Phase 1: Automatically decelerate to a stop - SIMPLIFIED"""
+	"""Phase 1: Automatically decelerate to a stop"""
 	deceleration_timer += get_physics_process_delta_time()
 	
 	var velocity = state.linear_velocity
 	var speed = velocity.length()
 	
-	# Much more aggressive timeout and threshold
-	if deceleration_timer > 2.0 or speed <= 15.0:
-		# We've stopped, move to rotation phase
-		print("Deceleration done (speed: ", speed, ", time: ", deceleration_timer, ")")
+	# If already stopped or nearly stopped, skip to rotation
+	if speed <= 20.0 or deceleration_timer < 0.1:  # Check on first frame
+		if speed <= 20.0:
+			print("Already stopped (speed: ", speed, "), moving to rotation phase")
+			state.linear_velocity = Vector2.ZERO  # Full stop
+			engine_particles.emitting = false
+			hyperspace_phase = HyperspacePhase.ROTATION
+			rotation_timer = 0.0
+			calculate_target_rotation()
+			return
+	
+	# Timeout check
+	if deceleration_timer > 3.0:
+		print("Deceleration timeout, forcing stop")
+		state.linear_velocity = Vector2.ZERO
 		engine_particles.emitting = false
-		
-		# OPTION: Skip rotation entirely if it keeps causing problems
-		# Uncomment these lines and comment out the rotation lines below:
-		# hyperspace_phase = HyperspacePhase.ACCELERATION
-		# acceleration_timer = 0.0
-		# return
-		
 		hyperspace_phase = HyperspacePhase.ROTATION
 		rotation_timer = 0.0
 		calculate_target_rotation()
 		return
 	
 	# Apply reverse thrust to slow down
-	if speed > 0.1:  # Avoid division by zero
-		var reverse_direction = -velocity.normalized()
-		var decel_force = reverse_direction * thrust_power * 2.0  # Stronger deceleration
-		state.apply_central_force(decel_force)
-		engine_particles.emitting = true
+	var reverse_direction = -velocity.normalized()
+	var decel_force = reverse_direction * thrust_power * 2.0
+	state.apply_central_force(decel_force)
+	engine_particles.emitting = true
 	
 	print("Decelerating... Speed: ", speed)
 
@@ -129,10 +137,10 @@ func handle_rotation_phase(state):
 	rotation_timer += get_physics_process_delta_time()
 	
 	var angle_diff = angle_difference(rotation, target_rotation)
-	var rotation_threshold = 0.5  # Much more forgiving - about 30 degrees
+	var rotation_threshold = 0.1  # About 6 degrees
 	
-	# Safety timeout - if rotation takes too long, just move on
-	if rotation_timer > 3.0:
+	# Timeout check
+	if rotation_timer > 1.0:
 		print("Rotation timeout - continuing to acceleration")
 		state.angular_velocity = 0.0
 		hyperspace_phase = HyperspacePhase.ACCELERATION
@@ -140,21 +148,25 @@ func handle_rotation_phase(state):
 		return
 	
 	if abs(angle_diff) > rotation_threshold:
-		# Simple rotation - just turn toward target
-		var turn_speed = rotation_speed * 1.2
+		# Smooth rotation with damping
+		var turn_speed = rotation_speed * 1.5
 		var desired_angular_velocity = sign(angle_diff) * -turn_speed
-		state.angular_velocity = desired_angular_velocity
 		
-		print("Rotating... Remaining: ", rad_to_deg(abs(angle_diff)), " degrees")
+		# Add damping as we get closer
+		var damping_factor = min(abs(angle_diff) / 0.5, 1.0)
+		state.angular_velocity = desired_angular_velocity * damping_factor
+		
+		print("Rotating... Angle diff: ", rad_to_deg(angle_diff), " degrees")
 	else:
-		# Close enough! Move to acceleration phase
-		print("Rotation close enough, starting acceleration")
+		# Rotation complete
+		print("Rotation complete, starting acceleration")
 		state.angular_velocity = 0.0
+		rotation = target_rotation  # Snap to exact angle
 		hyperspace_phase = HyperspacePhase.ACCELERATION
 		acceleration_timer = 0.0
 
 func handle_acceleration_phase(state):
-	"""Phase 3: Dramatically accelerate toward destination - SIMPLIFIED"""
+	"""Phase 3: Dramatically accelerate toward destination"""
 	acceleration_timer += get_physics_process_delta_time()
 	
 	# Apply massive forward thrust
@@ -164,14 +176,14 @@ func handle_acceleration_phase(state):
 	
 	var current_speed = state.linear_velocity.length()
 	
-	# Make sure we save the direction we're actually traveling
-	if current_speed > 100.0:  # Only save direction when moving fast enough
+	# Save actual travel direction
+	if current_speed > 100.0:
 		jump_direction = state.linear_velocity.normalized()
 	
-	print("Accelerating... Speed: ", current_speed, " Direction: ", jump_direction)
+	print("Accelerating... Speed: ", current_speed)
 	
-	# After 4 seconds or high speed, trigger flash
-	if acceleration_timer >= 4.0 or current_speed >= hyperspace_entry_speed * 1.5:
+	# After 3 seconds or high speed, trigger flash
+	if acceleration_timer >= 3.5 or current_speed >= hyperspace_entry_speed * 4:
 		print("Acceleration complete, flash time!")
 		hyperspace_phase = HyperspacePhase.FLASH
 		flash_timer = 0.0
@@ -180,36 +192,31 @@ func handle_flash_phase(state):
 	"""Phase 4: Flash effect and system transition"""
 	flash_timer += get_physics_process_delta_time()
 	
-	print("Flash phase... Timer: ", flash_timer)
-	
-	if flash_timer < 0.5:  # Extended flash duration
+	if flash_timer < 0.3:
 		# Show white flash
 		if flash_overlay:
-			flash_overlay.color = Color(1, 1, 1, 1)  # Full white, full opacity
+			var alpha = sin(flash_timer * PI / 0.3)  # Fade in/out
+			flash_overlay.color = Color(1, 1, 1, alpha)
 			flash_overlay.visible = true
-			print("Flash overlay active")
-		else:
-			print("ERROR: Flash overlay is null!")
 	else:
 		# Flash complete, transition to new system
 		print("Flash complete, transitioning to new system")
 		if flash_overlay:
 			flash_overlay.visible = false
 		
-		# Change system and position ship at edge
 		transition_to_new_system()
 		hyperspace_phase = HyperspacePhase.ENTRY
 
 func handle_entry_phase(state):
-	"""Phase 5: Enter new system and decelerate - SIMPLIFIED"""
+	"""Phase 5: Enter new system and decelerate"""
 	var distance_to_target = global_position.distance_to(entry_target)
 	var current_speed = state.linear_velocity.length()
 	
-	print("Entry phase - Speed: ", current_speed, " Distance to center: ", distance_to_target)
+	print("Entry phase - Speed: ", current_speed, " Distance: ", distance_to_target)
 	
-	# Simple deceleration when getting close to center
-	if distance_to_target < 1200 or current_speed < max_velocity * 1.5:
-		print("Entry deceleration complete - returning control to player")
+	# Complete when close enough or slow enough
+	if distance_to_target < 800 or current_speed < max_velocity:
+		print("Entry complete - returning control")
 		engine_particles.emitting = false
 		complete_hyperspace_sequence()
 		return
@@ -217,83 +224,77 @@ func handle_entry_phase(state):
 	# Apply gentle deceleration
 	if current_speed > max_velocity:
 		var velocity_direction = state.linear_velocity.normalized()
-		var decel_force = -velocity_direction * thrust_power * 1.5
+		var decel_force = -velocity_direction * thrust_power * 1.2
 		state.apply_central_force(decel_force)
 		engine_particles.emitting = true
 
 func transition_to_new_system():
-	"""Handle the actual system change and ship positioning - SIMPLIFIED"""
-	print("Transitioning to new system...")
+	"""Handle the actual system change and ship positioning"""
+	print("Transitioning to new system: ", hyperspace_destination)
 	
-	# Change the system first
-	UniverseManager.change_system(hyperspace_destination)
-	
-	# Simple positioning: enter from edge in the direction we were traveling
+	# Calculate entry position based on map direction
 	var system_center = Vector2.ZERO
-	var edge_distance = 2000.0
+	var edge_distance = 3000.0
 	
-	# Use the saved direction from the map calculation
-	var travel_direction = jump_direction
-	if travel_direction.length() == 0:
-		travel_direction = Vector2(0, -1)  # Default upward
-	
-	# Position ship at edge, opposite to where we want to go
-	entry_position = system_center - travel_direction * edge_distance
-	global_position = entry_position
+	# Use the stored map direction (reverse it to enter from opposite side)
+	var entry_direction = -map_direction
+	entry_position = system_center + entry_direction * edge_distance
+	entry_target = system_center
 	
 	# Set velocity toward center
-	linear_velocity = travel_direction * hyperspace_entry_speed
+	linear_velocity = -entry_direction * hyperspace_entry_speed
 	
-	# Keep the ship's current rotation - don't change it!
-	# The ship should maintain the angle it had when accelerating
-	print("Keeping current ship rotation: ", rad_to_deg(rotation), " degrees")
+	# Keep the ship's rotation
+	print("Entry position: ", entry_position)
+	print("Entry velocity: ", linear_velocity)
+	print("Ship rotation: ", rad_to_deg(rotation), " degrees")
 	
-	# Force camera to follow ship immediately
-	var camera = get_node("Camera2D")
+	# Force position update BEFORE changing system
+	global_position = entry_position
+	
+	# Force camera to new position
 	if camera:
 		camera.global_position = global_position
+		camera.reset_smoothing()  # This should reset any interpolation
+	
+	# Now change the system
+	UniverseManager.change_system(hyperspace_destination)
+	
+	# Force another camera update after system change
+	if camera:
+		await get_tree().process_frame  # Wait one frame
+		camera.global_position = global_position
 		camera.force_update_scroll()
-	
-	print("Ship positioned at: ", entry_position)
-	print("Moving toward center with velocity: ", linear_velocity)
-	print("Ship rotation unchanged: ", rad_to_deg(rotation), " degrees")
-	
-	entry_target = system_center
 
 func calculate_target_rotation():
-	"""Calculate which direction the ship should face - SIMPLIFIED"""
-	# Get system positions from the hyperspace map
-	var current_system = UniverseManager.current_system_id
+	"""Calculate which direction the ship should face based on map"""
+	# Get the direction from hyperspace map
 	var system_positions = get_system_positions()
+	var current_system = UniverseManager.current_system_id
 	
 	if current_system in system_positions and hyperspace_destination in system_positions:
 		var current_pos = system_positions[current_system]
 		var target_pos = system_positions[hyperspace_destination]
 		
-		# Simple direction calculation
-		var direction = (target_pos - current_pos).normalized()
+		# Calculate direction to target
+		map_direction = (target_pos - current_pos).normalized()
 		
-		# Save this direction for later use
-		jump_direction = direction
+		# Convert to rotation (ship faces up by default, which is -Y direction)
+		# So we need to subtract PI/2 instead of adding it
+		target_rotation = map_direction.angle() - PI/2
 		
-		# Simple angle conversion - ship sprite faces up (negative Y)
-		target_rotation = direction.angle() + PI/2
-		
-		print("Simple direction to ", hyperspace_destination, ": ", direction)
+		print("Direction to ", hyperspace_destination, ": ", map_direction)
 		print("Target rotation: ", rad_to_deg(target_rotation), " degrees")
+		print("Current rotation: ", rad_to_deg(rotation), " degrees")
 	else:
-		# Just face up as fallback
+		# Fallback
 		target_rotation = 0.0
-		jump_direction = Vector2(0, -1)
-		print("Using fallback direction: up")
+		map_direction = Vector2(0, -1)
 
 func get_system_positions() -> Dictionary:
 	"""Get the system positions used by the hyperspace map"""
-	# This recreates the same positions used in HyperspaceMap
-	# TODO: Later we might want to centralize this in UniverseManager
-	var viewport_size = get_viewport().size
-	var map_width = 800 - 100 - 320  # Match HyperspaceMap calculations
-	var map_height = 600 - 100
+	var map_width = 480
+	var map_height = 500
 	var margin = 50
 	
 	return {
@@ -320,7 +321,6 @@ func angle_difference(current: float, target: float) -> float:
 	return diff
 
 func limit_velocity(state):
-	# Don't limit velocity during hyperspace sequence
 	if hyperspace_state == HyperspaceState.HYPERSPACE_SEQUENCE:
 		return
 		
@@ -328,7 +328,6 @@ func limit_velocity(state):
 		state.linear_velocity = state.linear_velocity.normalized() * max_velocity
 
 func _input(event):
-	# Only respond to input if not in hyperspace sequence
 	if hyperspace_state != HyperspaceState.NORMAL:
 		return
 		
@@ -355,14 +354,16 @@ func _on_interaction_area_exited(body):
 	if body == current_target:
 		current_target = null
 
-# =============================================================================
-# HYPERSPACE SEQUENCE METHODS
-# =============================================================================
-
 func start_hyperspace_sequence(destination_system: String):
 	"""Begin the hyperspace jump sequence"""
 	print("Starting hyperspace sequence to: ", destination_system)
 	
+	# Disable camera smoothing for the entire sequence
+	if camera:
+		camera.position_smoothing_enabled = false
+		camera.global_position = global_position
+	
+	# Reset all state
 	hyperspace_state = HyperspaceState.HYPERSPACE_SEQUENCE
 	hyperspace_phase = HyperspacePhase.DECELERATION
 	hyperspace_destination = destination_system
@@ -380,7 +381,11 @@ func start_hyperspace_sequence(destination_system: String):
 
 func complete_hyperspace_sequence():
 	"""Complete the hyperspace sequence and return control to player"""
-	print("Hyperspace sequence complete - control returned to player")
+	print("Hyperspace sequence complete")
+	
+	# Re-enable camera smoothing
+	if camera:
+		camera.position_smoothing_enabled = true
 	
 	# Reset to normal state
 	hyperspace_state = HyperspaceState.NORMAL
@@ -395,30 +400,27 @@ func complete_hyperspace_sequence():
 	entry_position = Vector2.ZERO
 	entry_target = Vector2.ZERO
 	jump_direction = Vector2.ZERO
+	map_direction = Vector2.ZERO
 
 func create_flash_overlay():
 	"""Create the white flash overlay for hyperspace effect"""
-	# Wait a frame to ensure scene is ready
-	await get_tree().process_frame
+	# Create a CanvasLayer to ensure it renders above everything
+	var canvas_layer = CanvasLayer.new()
+	canvas_layer.name = "FlashLayer"
+	canvas_layer.layer = 10  # High layer to be above everything
+	add_child(canvas_layer)
 	
-	var flash = ColorRect.new()
-	flash.name = "FlashOverlay"
-	flash.color = Color(1, 1, 1, 0)  # White, transparent initially
-	flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	flash.visible = false
-	flash.z_index = 1000  # Very high Z to appear above everything
+	# Create the flash overlay
+	flash_overlay = ColorRect.new()
+	flash_overlay.name = "FlashOverlay"
+	flash_overlay.color = Color(1, 1, 1, 0)
+	flash_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	flash_overlay.visible = false
 	
 	# Make it full screen
-	flash.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	flash_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	
-	# Add to the UI layer instead of root to ensure it's visible
-	var main_scene = get_tree().get_first_node_in_group("ui")
-	if main_scene:
-		main_scene.add_child(flash)
-		flash_overlay = flash
-		print("Flash overlay created and added to UI")
-	else:
-		# Fallback to root
-		get_tree().root.add_child(flash)
-		flash_overlay = flash
-		print("Flash overlay created and added to root")
+	# Add to canvas layer
+	canvas_layer.add_child(flash_overlay)
+	
+	print("Flash overlay created in CanvasLayer")
