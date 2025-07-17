@@ -14,5 +14,4 @@ script = ExtResource("1_gy4ls")
 [node name="PlayerSpawn" type="Node2D" parent="."]
 
 [node name="PlanetGenerator" parent="." instance=ExtResource("3_yc7ia")]
-visible = false
 position = Vector2(402, 579)

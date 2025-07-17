@@ -17,12 +17,13 @@ var selected_system: String = ""
 var current_system: String = ""
 
 # Visual settings - retro DOS green theme
-var bg_color = Color(0.0, 0.2, 0.0, 0.50)  # Dark green with 75% transparency
-var line_color = Color(0.0, 0.4, 0.0, 1.0)  # Bright green
-var system_color = Color(0.0, 0.7, 0.0, 1.0)  # Bright green
-var current_system_color = Color(0.0, 1.0, 0.0, 1.0)  # Yellow
-var selected_system_color = Color(0.0, 1.0, 0.0, 1.0)  # Orange
-var unavailable_color = Color(0.0, 0.3, 0.0, 1.0)  # Dark gray
+var bg_color = Color(0.0, 0.2, 0.0, 0.25)  # Dark green with 75% transparency
+var line_color = Color(0.0, 0.8, 0.0, 1.0)  # Bright green
+var system_color = Color(0.0, 1.0, 0.0, 1.0)  # Bright green
+var current_system_color = Color(1.0, 1.0, 0.0, 1.0)  # Yellow
+var selected_system_color = Color(1.0, 0.5, 0.0, 1.0)  # Orange
+var unavailable_color = Color(0.3, 0.3, 0.3, 1.0)  # Dark gray
+
 var system_radius = 8.0
 var line_width = 2.0
 
@@ -196,8 +197,15 @@ func can_travel_to(system_id: String) -> bool:
 
 func _on_jump_pressed():
 	if selected_system != "" and can_travel_to(selected_system):
-		UniverseManager.change_system(selected_system)
-		hide_map()
+		# Start hyperspace sequence instead of instant jump
+		var player_ship = UniverseManager.player_ship
+		if player_ship and player_ship.has_method("start_hyperspace_sequence"):
+			player_ship.start_hyperspace_sequence(selected_system)
+			hide_map()
+		else:
+			# Fallback to instant jump if player ship not found
+			UniverseManager.change_system(selected_system)
+			hide_map()
 
 func _on_cancel_pressed():
 	hide_map()
