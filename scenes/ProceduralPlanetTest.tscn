@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://bnq56g14vn216"]
+
+[ext_resource type="Script" uid="uid://dliajykigr5b0" path="res://scripts/ProceduralPlanetTest.gd" id="1_test"]
+
+[node name="ProceduralPlanetTest" type="Node2D"]
+script = ExtResource("1_test")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(0.3, 0.3)
+
+[node name="Label" type="Label" parent="."]
+offset_left = -400.0
+offset_top = -300.0
+offset_right = 400.0
+offset_bottom = -260.0
+text = "Procedural Planet Test - Press Enter to regenerate"
+horizontal_alignment = 1

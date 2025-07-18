@@ -1,5 +1,5 @@
 # =============================================================================
-# SYSTEM SCENE - Fixed camera positioning during transitions
+# SYSTEM SCENE - Fixed camera positioning with planet scaling support
 # =============================================================================
 # SystemScene.gd
 extends Node2D
@@ -45,4 +45,9 @@ func spawn_celestial_bodies(bodies_data: Array):
 		var celestial_body = preload("res://scenes/CelestialBody.tscn").instantiate()
 		celestial_body.celestial_data = body_data
 		celestial_body.position = Vector2(body_data.position.x, body_data.position.y)
+		
+		# Apply scale if specified for procedural planets
+		if body_data.has("scale") and body_data.get("type") == "planet":
+			celestial_body.scale = Vector2(body_data.scale, body_data.scale)
+		
 		celestial_bodies_container.add_child(celestial_body)
