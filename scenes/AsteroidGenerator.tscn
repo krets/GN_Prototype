@@ -1,0 +1,129 @@
+[gd_scene load_steps=7 format=3 uid="uid://beb37b31w0yox"]
+
+[ext_resource type="Shader" uid="uid://curpuo34e2bn" path="res://shaders/asteroidShader_Stage02.gdshader" id="1_paqj7"]
+[ext_resource type="Shader" uid="uid://ddba2kf30mgk3" path="res://shaders/asteroidShader_Stage03.gdshader" id="2_6kur5"]
+[ext_resource type="Shader" uid="uid://du17cjw6e15co" path="res://shaders/asteroidShader_Stage07.gdshader" id="3_svvpv"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6kur5"]
+shader = ExtResource("1_paqj7")
+shader_parameter/asteroid_size = 0.8
+shader_parameter/edge_smoothness = 0.02
+shader_parameter/shape_distortion = 0.5
+shader_parameter/shape_distortion_scale = 1.992
+shader_parameter/shape_distortion_offset = Vector2(0, 0)
+shader_parameter/base_color = Color(0.566074, 0.50448, 0.443076, 1)
+shader_parameter/color_variation = 0.789
+shader_parameter/dark_color = Color(0.0767641, 0.0507811, 0.0263046, 1)
+shader_parameter/surface_roughness = 1.759
+shader_parameter/crater_depth = 0.773
+shader_parameter/detail_strength = 0.51
+shader_parameter/crater_density = 9.845
+shader_parameter/crater_size_min = 0.024
+shader_parameter/crater_size_max = 0.395
+shader_parameter/crater_depth_variation = 1.145
+shader_parameter/crater_rim_height = 0.528
+shader_parameter/crater_rim_width = 0.28
+shader_parameter/large_crater_probability = 0.3
+shader_parameter/crater_clustering = 0.473
+shader_parameter/large_feature_scale = 4.0
+shader_parameter/medium_detail_scale = 15.0
+shader_parameter/fine_detail_scale = 47.152
+shader_parameter/large_feature_offset = Vector2(0.235, 0)
+shader_parameter/medium_detail_offset = Vector2(0, 0)
+shader_parameter/fine_detail_offset = Vector2(0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_svvpv"]
+shader = ExtResource("2_6kur5")
+shader_parameter/asteroid_size = 0.868
+shader_parameter/edge_smoothness = 0.008
+shader_parameter/shape_distortion = 2.568
+shader_parameter/shape_distortion_scale = 0.4
+shader_parameter/shape_distortion_offset = Vector2(0.02, 0)
+shader_parameter/overall_warp_amount = 0.0
+shader_parameter/overall_warp_scale = 0.748
+shader_parameter/overall_warp_offset = Vector2(0.615, 0.2)
+shader_parameter/base_color = Color(0.590601, 0.528155, 0.465944, 1)
+shader_parameter/color_variation = 0.3
+shader_parameter/dark_color = Color(0.11088, 0.12, 0.0516, 1)
+shader_parameter/surface_roughness = 1.034
+shader_parameter/crater_depth = 1.0
+shader_parameter/detail_strength = 1.0
+shader_parameter/crater_density = 5.755
+shader_parameter/crater_size_min = 0.048
+shader_parameter/crater_size_max = 0.176
+shader_parameter/crater_depth_variation = 2.0
+shader_parameter/crater_rim_height = 0.742
+shader_parameter/crater_rim_width = 0.248
+shader_parameter/large_crater_probability = 0.54
+shader_parameter/crater_clustering = 0.629
+shader_parameter/crater_shape_noise = 0.422
+shader_parameter/crater_edge_blend = 0.671
+shader_parameter/large_feature_scale = 9.532
+shader_parameter/medium_detail_scale = 37.595
+shader_parameter/fine_detail_scale = 38.797
+shader_parameter/large_feature_offset = Vector2(1.435, 0)
+shader_parameter/medium_detail_offset = Vector2(0.61, 0)
+shader_parameter/fine_detail_offset = Vector2(0, 0)
+shader_parameter/sun_angle = 135.0
+shader_parameter/sun_elevation = 30.0
+shader_parameter/sun_intensity = 1.2
+shader_parameter/ambient_light = 0.3
+shader_parameter/rim_light_intensity = 0.8
+shader_parameter/rim_light_width = 1.0
+shader_parameter/rim_light_color = Color(0.6, 0.7, 1, 1)
+shader_parameter/normal_strength = 1.0
+shader_parameter/surface_contrast = 1.2
+shader_parameter/shadow_strength = 0.4
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n7o5w"]
+shader = ExtResource("3_svvpv")
+shader_parameter/asteroid_radius = 0.664
+shader_parameter/shape_scale = Vector2(0.955, 0.67)
+shader_parameter/base_shape_seed = 88.414
+shader_parameter/warp_scale = 8.194
+shader_parameter/warp_amount = 0.226
+shader_parameter/warp_octaves = 3.971
+shader_parameter/warp_softening = 0.887
+shader_parameter/warp_smoothing = 0.692
+shader_parameter/warp_seed = 150.633
+shader_parameter/warp_offset = Vector2(0.255, -0.06)
+shader_parameter/sculpt_scale = 3.384
+shader_parameter/sculpt_strength = 0.503
+shader_parameter/sculpt_smoothing = 0.392
+shader_parameter/detail_scale_1 = 15.586
+shader_parameter/detail_strength_1 = 0.839
+shader_parameter/detail_scale_2 = 44.409
+shader_parameter/detail_strength_2 = 0.74
+shader_parameter/mask_scale = 9.949
+shader_parameter/smooth_areas = 0.57
+shader_parameter/rough_areas = 0.471
+shader_parameter/base_color = Color(0.362221, 0.221678, 0.125464, 1)
+shader_parameter/highlight_color = Color(0.621939, 0.433037, 0.31843, 1)
+shader_parameter/color_variation = 0.697
+shader_parameter/sun_angle = 273.228
+shader_parameter/sun_elevation = 82.025
+shader_parameter/sun_intensity = 2.259
+shader_parameter/ambient_light = 1.0
+shader_parameter/ambient_color = Color(0.2, 0.25, 0.35, 1)
+
+[node name="AsteroidGenerator" type="Node2D"]
+
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_6kur5")
+offset_right = 512.0
+offset_bottom = 512.0
+pivot_offset = Vector2(256, 256)
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_svvpv")
+offset_right = 512.0
+offset_bottom = 512.0
+pivot_offset = Vector2(256, 256)
+
+[node name="ColorRect3" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_n7o5w")
+offset_right = 512.0
+offset_bottom = 512.0
+pivot_offset = Vector2(256, 256)
