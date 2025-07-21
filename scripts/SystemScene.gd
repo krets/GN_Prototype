@@ -1,5 +1,5 @@
 # =============================================================================
-# SYSTEM SCENE - Fixed camera positioning with planet scaling support
+# SYSTEM SCENE - Fixed camera positioning with planet scaling support + minimap group
 # =============================================================================
 # SystemScene.gd
 extends Node2D
@@ -9,6 +9,7 @@ class_name SystemScene
 @onready var player_spawn = $PlayerSpawn
 
 func _ready():
+	add_to_group("system_scene")  # Add this line for minimap detection
 	UniverseManager.system_changed.connect(_on_system_changed)
 	setup_system(UniverseManager.get_current_system())
 
