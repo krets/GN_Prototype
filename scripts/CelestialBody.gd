@@ -1,5 +1,5 @@
 # =============================================================================
-# CELESTIAL BODY - Generic space object with procedural planet support
+# CELESTIAL BODY - Now uses PlanetLibrary for procedural planets
 # =============================================================================
 # CelestialBody.gd
 extends StaticBody2D
@@ -21,11 +21,13 @@ func _ready():
 		label.text = celestial_data.name
 
 func create_procedural_planet():
-	"""Create a procedural planet using the shader system"""
-	# Load the planet shader
-	var planet_shader = load("res://shaders/PlanetShader_Stage9.gdshader")
-	if not planet_shader:
-		push_error("Could not load PlanetShader_Stage9.gdshader")
+	"""Create a procedural planet using the library system"""
+	var planet_id = celestial_data.get("id", "default")
+	
+	# Get material from the planet library
+	var material = PlanetLibraryLoader.get_planet_material(planet_id)
+	if not material:
+		push_error("Failed to get material for planet: " + planet_id)
 		return
 	
 	# Create ColorRect for the procedural planet
@@ -38,14 +40,11 @@ func create_procedural_planet():
 	procedural_planet.position = -planet_size / 2  # Center the planet
 	procedural_planet.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
-	# Create shader material with default settings
-	var material = ShaderMaterial.new()
-	material.shader = planet_shader
-	
-	# Apply color variations based on planet data
-	apply_planet_variations(material)
-	
+	# Apply the material from the library
 	procedural_planet.material = material
+	
+	# Apply any system-specific modifications
+	apply_system_variations(material)
 	
 	# Hide the original sprite and add the procedural planet
 	sprite.visible = false
@@ -53,100 +52,34 @@ func create_procedural_planet():
 	
 	# Update collision shape to match new planet size
 	update_collision_shape(planet_size)
+	
+	print("Created procedural planet: ", planet_id)
 
-func apply_planet_variations(material: ShaderMaterial):
-	"""Apply color and scale variations based on celestial body data"""
-	var planet_id = celestial_data.get("id", "")
+func apply_system_variations(material: ShaderMaterial):
+	"""Apply minor system-specific variations (lighting, seeds)"""
 	var system_id = UniverseManager.current_system_id
+	var planet_id = celestial_data.get("id", "")
 	
-	# Base seed from planet and system for consistent generation
+	# Generate system-consistent but planet-unique seeds
 	var base_seed = hash(planet_id + system_id) % 1000
-	
-	# Color variations based on planet type/name
-	match planet_id:
-		"earth":
-			# Earth-like: blue oceans, green/brown land
-			material.set_shader_parameter("deep_ocean_color", Color(0.1, 0.2, 0.6))
-			material.set_shader_parameter("shallow_water_color", Color(0.2, 0.4, 0.7))
-			material.set_shader_parameter("lowland_color", Color(0.2, 0.6, 0.3))
-			material.set_shader_parameter("highland_color", Color(0.3, 0.5, 0.2))
-			material.set_shader_parameter("mountain_color", Color(0.5, 0.4, 0.3))
-			material.set_shader_parameter("continent_seed", float(base_seed))
-			
-		"mars", "rigel_beta":
-			# Mars-like: red/orange desert world
-			material.set_shader_parameter("deep_ocean_color", Color(0.3, 0.1, 0.1))
-			material.set_shader_parameter("shallow_water_color", Color(0.4, 0.2, 0.1))
-			material.set_shader_parameter("lowland_color", Color(0.6, 0.3, 0.2))
-			material.set_shader_parameter("highland_color", Color(0.7, 0.4, 0.2))
-			material.set_shader_parameter("mountain_color", Color(0.5, 0.3, 0.2))
-			material.set_shader_parameter("desert_color", Color(0.8, 0.4, 0.2))
-			material.set_shader_parameter("desert_intensity", 2.0)
-			material.set_shader_parameter("continent_threshold", 0.3)  # More land
-			material.set_shader_parameter("continent_seed", float(base_seed + 100))
-			
-		"proxima_b", "new_geneva":
-			# Alien world: purple/blue tints
-			material.set_shader_parameter("deep_ocean_color", Color(0.2, 0.1, 0.4))
-			material.set_shader_parameter("shallow_water_color", Color(0.3, 0.2, 0.6))
-			material.set_shader_parameter("lowland_color", Color(0.4, 0.3, 0.6))
-			material.set_shader_parameter("highland_color", Color(0.5, 0.3, 0.5))
-			material.set_shader_parameter("mountain_color", Color(0.4, 0.3, 0.4))
-			material.set_shader_parameter("continent_seed", float(base_seed + 200))
-			
-		"vega_prime":
-			# Mining world: gray/brown rocky
-			material.set_shader_parameter("deep_ocean_color", Color(0.2, 0.2, 0.1))
-			material.set_shader_parameter("shallow_water_color", Color(0.3, 0.3, 0.2))
-			material.set_shader_parameter("lowland_color", Color(0.4, 0.4, 0.3))
-			material.set_shader_parameter("highland_color", Color(0.5, 0.4, 0.3))
-			material.set_shader_parameter("mountain_color", Color(0.6, 0.5, 0.4))
-			material.set_shader_parameter("terrain_strength", 1.2)  # More mountainous
-			material.set_shader_parameter("continent_seed", float(base_seed + 300))
-			
-		"sirius_major":
-			# Wealthy trade world: golden/yellow tints
-			material.set_shader_parameter("deep_ocean_color", Color(0.1, 0.2, 0.3))
-			material.set_shader_parameter("shallow_water_color", Color(0.2, 0.3, 0.4))
-			material.set_shader_parameter("lowland_color", Color(0.5, 0.5, 0.3))
-			material.set_shader_parameter("highland_color", Color(0.6, 0.5, 0.3))
-			material.set_shader_parameter("mountain_color", Color(0.7, 0.6, 0.4))
-			material.set_shader_parameter("continent_seed", float(base_seed + 400))
-			
-		_:
-			# Default variation: randomize colors based on seed
-			var rng = RandomNumberGenerator.new()
-			rng.seed = base_seed
-			
-			# Generate coherent color palette
-			var hue_base = rng.randf()
-			var saturation = rng.randf_range(0.3, 0.8)
-			var brightness = rng.randf_range(0.4, 0.7)
-			
-			var base_color = Color.from_hsv(hue_base, saturation, brightness)
-			var ocean_color = Color.from_hsv(fmod(hue_base + 0.3, 1.0), saturation * 0.8, brightness * 0.6)
-			
-			material.set_shader_parameter("deep_ocean_color", ocean_color * 0.7)
-			material.set_shader_parameter("shallow_water_color", ocean_color)
-			material.set_shader_parameter("lowland_color", base_color)
-			material.set_shader_parameter("highland_color", base_color * 0.8)
-			material.set_shader_parameter("mountain_color", base_color * 0.6)
-			material.set_shader_parameter("continent_seed", float(base_seed))
-	
-	# System-wide variations
-	apply_system_variations(material, system_id, base_seed)
-
-func apply_system_variations(material: ShaderMaterial, system_id: String, base_seed: int):
-	"""Apply variations based on the star system"""
 	var system_rng = RandomNumberGenerator.new()
 	system_rng.seed = hash(system_id)
 	
-	# Vary terrain seeds for system coherence but planet uniqueness
-	material.set_shader_parameter("terrain_seed", float(base_seed + system_rng.randi() % 500))
-	material.set_shader_parameter("detail_seed", float(base_seed + system_rng.randi() % 500))
-	material.set_shader_parameter("river_seed", float(base_seed + system_rng.randi() % 500))
+	# Update terrain seeds for variety while keeping the library's base appearance
+	var current_continent_seed = material.get_shader_parameter("continent_seed")
+	if current_continent_seed == null or current_continent_seed == 0.0:
+		material.set_shader_parameter("continent_seed", float(base_seed))
 	
-	# System-based lighting variations (different star types)
+	# Add slight seed variations for other terrain features
+	material.set_shader_parameter("terrain_seed", float(base_seed + system_rng.randi() % 200))
+	material.set_shader_parameter("detail_seed", float(base_seed + system_rng.randi() % 200))
+	material.set_shader_parameter("river_seed", float(base_seed + system_rng.randi() % 200))
+	
+	# Apply system-based lighting variations (different star types)
+	apply_star_lighting(material, system_id)
+
+func apply_star_lighting(material: ShaderMaterial, system_id: String):
+	"""Apply star-type-specific lighting"""
 	match system_id:
 		"sol_system":
 			# Yellow star - warm light
@@ -170,10 +103,19 @@ func apply_system_variations(material: ShaderMaterial, system_id: String, base_s
 			material.set_shader_parameter("light_intensity", 1.4)
 			material.set_shader_parameter("ambient_color", Color(0.5, 0.6, 1.0))
 			
+		"arcturus_system":
+			# Red giant - warm orange light
+			material.set_shader_parameter("light_color", Color(1.0, 0.8, 0.6))
+			material.set_shader_parameter("ambient_color", Color(0.7, 0.5, 0.4))
+			
+		"vega_system":
+			# Blue-white star - bright cool light
+			material.set_shader_parameter("light_color", Color(0.9, 0.9, 1.0))
+			material.set_shader_parameter("light_intensity", 1.1)
+			
 		_:
-			# Default star lighting with slight variations
-			var light_tint = system_rng.randf_range(0.8, 1.2)
-			material.set_shader_parameter("light_color", Color(light_tint, 0.95, 0.9))
+			# Default: slight variation but don't override library settings too much
+			pass
 
 func update_collision_shape(planet_size: Vector2):
 	"""Update collision shapes to match the new planet size"""
@@ -201,3 +143,15 @@ func interact():
 	print("Landing on: ", celestial_data.name)
 	UniverseManager.celestial_body_approached.emit(celestial_data)
 	# Here you would transition to planet surface or show services menu
+
+# Development helper function
+func reload_planet_from_library():
+	"""Reload this planet's appearance from the library (useful during development)"""
+	if procedural_planet and celestial_data.get("type") == "planet":
+		var planet_id = celestial_data.get("id", "default")
+		PlanetLibraryLoader.reload_library()
+		var new_material = PlanetLibraryLoader.get_planet_material(planet_id)
+		if new_material:
+			procedural_planet.material = new_material
+			apply_system_variations(new_material)
+			print("Reloaded planet from library: ", planet_id)

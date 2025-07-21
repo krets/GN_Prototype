@@ -1,0 +1,216 @@
+[gd_scene load_steps=4 format=3 uid="uid://ckqawt5f0td3o"]
+
+[ext_resource type="Shader" uid="uid://bupy1m3oobg0j" path="res://shaders/PlanetShader_Stage9.gdshader" id="1_w7247"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_17jbo"]
+shader = ExtResource("1_w7247")
+shader_parameter/planet_radius = 0.45
+shader_parameter/edge_softness = 0.01
+shader_parameter/uv_offset_x = 0.0
+shader_parameter/uv_offset_y = 0.0
+shader_parameter/continent_seed = 42.0
+shader_parameter/terrain_seed = 123.0
+shader_parameter/river_seed = 456.0
+shader_parameter/detail_seed = 789.0
+shader_parameter/cloud_seed = 999.0
+shader_parameter/output_mode = 0
+shader_parameter/normal_map_intensity = 0.1
+shader_parameter/sphere_strength = -1.25
+shader_parameter/light_direction = Vector2(0.3, 0.3)
+shader_parameter/light_intensity = 1.0
+shader_parameter/light_color = Color(1, 0.95, 0.8, 1)
+shader_parameter/shadow_tint = Color(0.5, 0.6, 0.8, 1)
+shader_parameter/shadow_tint_strength = 0.2
+shader_parameter/ambient_light = 0.3
+shader_parameter/ambient_color = Color(0.4, 0.6, 1, 1)
+shader_parameter/rim_light_intensity = 0.25
+shader_parameter/rim_light_color = Color(0.8, 0.9, 1, 1)
+shader_parameter/rim_light_falloff = 2.0
+shader_parameter/continent_scale = 3.0
+shader_parameter/continent_threshold = 0.5
+shader_parameter/continent_sharpness = 0.25
+shader_parameter/continent_octaves = 3.0
+shader_parameter/continent_persistence = 0.6
+shader_parameter/ocean_depth = 0.4
+shader_parameter/warp_strength = 0.15
+shader_parameter/warp_scale = 5.0
+shader_parameter/terrain_scale = 5.0
+shader_parameter/terrain_strength = 0.75
+shader_parameter/terrain_octaves = 3.0
+shader_parameter/terrain_persistence = 0.5
+shader_parameter/terrain_softness = 0.1
+shader_parameter/detail_scale = 8.0
+shader_parameter/detail_strength = 0.2
+shader_parameter/detail_octaves = 2.0
+shader_parameter/mountain_threshold = 0.7
+shader_parameter/highland_threshold = 0.4
+shader_parameter/cloud_coverage = 0.4
+shader_parameter/cloud_scale = 4.0
+shader_parameter/cloud_stretch_x = 1.0
+shader_parameter/cloud_stretch_y = 1.0
+shader_parameter/cloud_octaves = 3.0
+shader_parameter/cloud_persistence = 0.5
+shader_parameter/cloud_density = 0.8
+shader_parameter/cloud_sharpness = 0.1
+shader_parameter/cloud_color = Color(1, 1, 1, 1)
+shader_parameter/cloud_shadow_color = Color(0.7, 0.7, 0.8, 1)
+shader_parameter/cloud_opacity = 0.7
+shader_parameter/cloud_shadow_strength = 0.3
+shader_parameter/cloud_offset_x = 0.0
+shader_parameter/cloud_offset_y = 0.0
+shader_parameter/river_scale = 0.5
+shader_parameter/river_strength = 0.05
+shader_parameter/river_width = 0.05
+shader_parameter/river_octaves = 2.0
+shader_parameter/river_persistence = 0.5
+shader_parameter/ice_cap_size = 0.05
+shader_parameter/ice_cap_softness = 0.05
+shader_parameter/desert_latitude = 0.4
+shader_parameter/desert_width = 0.15
+shader_parameter/desert_intensity = 0.7
+shader_parameter/deep_ocean_color = Color(0.857595, 0.0841802, 0.430714, 1)
+shader_parameter/shallow_water_color = Color(0.2, 0.4, 0.6, 1)
+shader_parameter/river_color = Color(0.3, 0.5, 0.7, 1)
+shader_parameter/mountain_color = Color(0.5, 0.4, 0.3, 1)
+shader_parameter/highland_color = Color(0.3, 0.5, 0.2, 1)
+shader_parameter/lowland_color = Color(0.2, 0.6, 0.3, 1)
+shader_parameter/desert_color = Color(0.8, 0.6, 0.3, 1)
+shader_parameter/ice_color = Color(0.9, 0.95, 1, 1)
+shader_parameter/coastal_blend = 0.03
+shader_parameter/beach_color = Color(0.7, 0.6, 0.4, 1)
+shader_parameter/core_color = Color(1, 0.8, 0.3, 1)
+shader_parameter/core_size = 0.5
+shader_parameter/color_variation = 0.2
+shader_parameter/variation_tint = Color(0.2, 0.5, 0.8, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w7247"]
+shader = ExtResource("1_w7247")
+shader_parameter/planet_radius = 0.45
+shader_parameter/edge_softness = 0.01
+shader_parameter/uv_offset_x = 0.0
+shader_parameter/uv_offset_y = 0.0
+shader_parameter/continent_seed = 42.0
+shader_parameter/terrain_seed = 123.0
+shader_parameter/river_seed = 456.0
+shader_parameter/detail_seed = 789.0
+shader_parameter/cloud_seed = 999.0
+shader_parameter/output_mode = 0
+shader_parameter/normal_map_intensity = 0.1
+shader_parameter/sphere_strength = -1.25
+shader_parameter/light_direction = Vector2(0.3, 0.3)
+shader_parameter/light_intensity = 1.0
+shader_parameter/light_color = Color(1, 0.95, 0.8, 1)
+shader_parameter/shadow_tint = Color(0.5, 0.6, 0.8, 1)
+shader_parameter/shadow_tint_strength = 0.2
+shader_parameter/ambient_light = 0.3
+shader_parameter/ambient_color = Color(0.4, 0.6, 1, 1)
+shader_parameter/rim_light_intensity = 0.25
+shader_parameter/rim_light_color = Color(0.8, 0.9, 1, 1)
+shader_parameter/rim_light_falloff = 2.0
+shader_parameter/continent_scale = 3.0
+shader_parameter/continent_threshold = 0.5
+shader_parameter/continent_sharpness = 0.25
+shader_parameter/continent_octaves = 3.0
+shader_parameter/continent_persistence = 0.6
+shader_parameter/ocean_depth = 0.4
+shader_parameter/warp_strength = 0.15
+shader_parameter/warp_scale = 5.0
+shader_parameter/terrain_scale = 5.0
+shader_parameter/terrain_strength = 0.75
+shader_parameter/terrain_octaves = 3.0
+shader_parameter/terrain_persistence = 0.5
+shader_parameter/terrain_softness = 0.1
+shader_parameter/detail_scale = 8.0
+shader_parameter/detail_strength = 0.2
+shader_parameter/detail_octaves = 2.0
+shader_parameter/mountain_threshold = 0.7
+shader_parameter/highland_threshold = 0.4
+shader_parameter/cloud_coverage = 0.4
+shader_parameter/cloud_scale = 4.0
+shader_parameter/cloud_stretch_x = 1.0
+shader_parameter/cloud_stretch_y = 1.0
+shader_parameter/cloud_octaves = 3.0
+shader_parameter/cloud_persistence = 0.5
+shader_parameter/cloud_density = 0.8
+shader_parameter/cloud_sharpness = 0.1
+shader_parameter/cloud_color = Color(1, 1, 1, 1)
+shader_parameter/cloud_shadow_color = Color(0.7, 0.7, 0.8, 1)
+shader_parameter/cloud_opacity = 0.7
+shader_parameter/cloud_shadow_strength = 0.3
+shader_parameter/cloud_offset_x = 0.0
+shader_parameter/cloud_offset_y = 0.0
+shader_parameter/river_scale = 0.5
+shader_parameter/river_strength = 0.05
+shader_parameter/river_width = 0.05
+shader_parameter/river_octaves = 2.0
+shader_parameter/river_persistence = 0.5
+shader_parameter/ice_cap_size = 0.05
+shader_parameter/ice_cap_softness = 0.05
+shader_parameter/desert_latitude = 0.4
+shader_parameter/desert_width = 0.15
+shader_parameter/desert_intensity = 0.7
+shader_parameter/deep_ocean_color = Color(1, 0.666667, 0, 1)
+shader_parameter/shallow_water_color = Color(0.528411, 0.377524, 0, 1)
+shader_parameter/river_color = Color(0.3, 0.5, 0.7, 1)
+shader_parameter/mountain_color = Color(0.5, 0.4, 0.3, 1)
+shader_parameter/highland_color = Color(0.3, 0.5, 0.2, 1)
+shader_parameter/lowland_color = Color(0.2, 0.6, 0.3, 1)
+shader_parameter/desert_color = Color(0.8, 0.6, 0.3, 1)
+shader_parameter/ice_color = Color(0.9, 0.95, 1, 1)
+shader_parameter/coastal_blend = 0.03
+shader_parameter/beach_color = Color(0.7, 0.6, 0.4, 1)
+shader_parameter/core_color = Color(1, 0.8, 0.3, 1)
+shader_parameter/core_size = 0.5
+shader_parameter/color_variation = 0.2
+shader_parameter/variation_tint = Color(0.2, 0.5, 0.8, 1)
+
+[node name="PlanetLibrary" type="Node2D"]
+
+[node name="planet_default" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_17jbo")
+offset_right = 512.0
+offset_bottom = 512.0
+
+[node name="planet_earth" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_17jbo")
+offset_left = 600.0
+offset_right = 1112.0
+offset_bottom = 512.0
+
+[node name="planet_mars" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_17jbo")
+offset_left = 1200.0
+offset_right = 1712.0
+offset_bottom = 512.0
+
+[node name="planet_proxima_b" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_17jbo")
+offset_left = 1800.0
+offset_right = 2312.0
+offset_bottom = 512.0
+
+[node name="planet_vega_prime" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_17jbo")
+offset_left = 2400.0
+offset_right = 2912.0
+offset_bottom = 512.0
+
+[node name="planet_sirius_major" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_17jbo")
+offset_top = 600.0
+offset_right = 512.0
+offset_bottom = 1112.0
+
+[node name="planet_rigel_beta" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_17jbo")
+offset_left = 600.0
+offset_top = 600.0
+offset_right = 1112.0
+offset_bottom = 1112.0
+
+[node name="planet_new_geneva" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_w7247")
+offset_left = 1200.0
+offset_top = 600.0
+offset_right = 1712.0
+offset_bottom = 1112.0
