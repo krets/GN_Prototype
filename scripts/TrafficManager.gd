@@ -169,9 +169,12 @@ func spawn_npc_at_celestial_body(npc_ship: NPCShip):
 		spawn_npc_mid_system(npc_ship)
 		return
 	
-	# Position near the celestial body
+	# Position near the celestial body (but not exactly on it)
 	var body_pos = celestial_body.global_position
-	var offset = Vector2(randf_range(-100, 100), randf_range(-100, 100))
+	var offset_distance = randf_range(80, 150)  # Distance from the body
+	var offset_angle = randf() * TAU
+	var offset = Vector2.from_angle(offset_angle) * offset_distance
+	
 	npc_ship.global_position = body_pos + offset
 	npc_ship.linear_velocity = Vector2.ZERO
 	
@@ -190,12 +193,24 @@ func spawn_npc_traveling_to_planet(npc_ship: NPCShip):
 	# Position somewhere between system edge and the celestial body
 	var body_pos = celestial_body.global_position
 	var system_center = Vector2.ZERO
-	var direction_to_body = (body_pos - system_center).normalized()
 	
-	# Random distance along the path
-	var distance_factor = randf_range(0.3, 0.8)
-	var planet_distance = 2000 * distance_factor
-	npc_ship.global_position = system_center + direction_to_body * planet_distance
+	# Avoid spawning too close to system center
+	var direction_to_body = (body_pos - system_center).normalized()
+	var min_distance_from_center = 800.0  # Minimum distance from center
+	
+	# Random distance along the path, but not too close to center
+	var distance_factor = randf_range(0.4, 0.8)  # Increased minimum from 0.3
+	var planet_distance = max(min_distance_from_center, 2000 * distance_factor)
+	
+	# Calculate spawn position
+	var spawn_pos = system_center + direction_to_body * planet_distance
+	
+	# Add some perpendicular offset to avoid straight lines
+	var perpendicular = Vector2(-direction_to_body.y, direction_to_body.x)
+	var side_offset = randf_range(-400, 400)
+	spawn_pos += perpendicular * side_offset
+	
+	npc_ship.global_position = spawn_pos
 	
 	# Set velocity toward the planet
 	var travel_speed = randf_range(200, 300)
@@ -213,11 +228,17 @@ func spawn_npc_traveling_to_exit(npc_ship: NPCShip):
 	var system_center = Vector2.ZERO
 	var exit_direction = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
 	
-	# Position somewhere in mid-system
-	var exit_distance = randf_range(800, 1500)
-	npc_ship.global_position = system_center + Vector2(randf_range(-exit_distance, exit_distance), randf_range(-exit_distance, exit_distance))
+	# Position somewhere in mid-system, but avoid center
+	var min_distance = 600.0  # Minimum distance from center
+	var max_distance = 1500.0
+	var exit_distance = randf_range(min_distance, max_distance)
 	
-	# Set velocity toward exit
+	# Create a position that's not at the center
+	var spawn_angle = randf() * TAU
+	var spawn_offset = Vector2.from_angle(spawn_angle) * exit_distance
+	npc_ship.global_position = system_center + spawn_offset
+	
+	# Set velocity toward exit (in a different direction than spawn position)
 	var travel_speed = randf_range(150, 250)
 	npc_ship.linear_velocity = exit_direction * travel_speed
 	
@@ -230,12 +251,16 @@ func spawn_npc_traveling_to_exit(npc_ship: NPCShip):
 
 func spawn_npc_mid_system(npc_ship: NPCShip):
 	"""Spawn NPC in middle of system with random movement"""
-	# Random position in mid-system
-	var mid_distance = randf_range(500, 1200)
+	var system_center = Vector2.ZERO
+	
+	# Random position in mid-system, avoiding the center
+	var min_distance = 700.0  # Minimum distance from center
+	var max_distance = 1500.0
+	var mid_distance = randf_range(min_distance, max_distance)
 	var spawn_angle = randf() * TAU
 	npc_ship.global_position = Vector2.from_angle(spawn_angle) * mid_distance
 	
-	# Random velocity
+	# Random velocity in a different direction
 	var travel_speed = randf_range(100, 200)
 	var travel_angle = randf() * TAU
 	npc_ship.linear_velocity = Vector2.from_angle(travel_angle) * travel_speed
@@ -251,7 +276,7 @@ func spawn_npc_mid_system(npc_ship: NPCShip):
 	else:
 		# No celestial bodies, head to exit
 		var exit_direction = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
-		npc_ship.target_position = exit_direction * 3500.0
+		npc_ship.target_position = system_center + exit_direction * 3500.0
 		npc_ship.current_ai_state = npc_ship.AIState.FLYING_TO_EXIT
 
 func choose_random_celestial_body() -> Node2D:
@@ -277,6 +302,12 @@ func choose_random_celestial_body() -> Node2D:
 func calculate_hyperspace_entry() -> Dictionary:
 	"""Calculate where and how an NPC should enter from hyperspace"""
 	var system_center = Vector2.ZERO
+	var player_pos = Vector2.ZERO
+	
+	# Get player position for spawn distance calculations
+	var player = UniverseManager.player_ship
+	if player:
+		player_pos = player.global_position
 	
 	# Choose origin system from connections
 	var current_system = UniverseManager.get_current_system()
@@ -289,8 +320,8 @@ func calculate_hyperspace_entry() -> Dictionary:
 	# Get direction from origin system
 	var entry_direction = get_entry_direction_from_system(origin_system)
 	
-	# Calculate spawn position
-	var spawn_position = system_center + entry_direction * spawn_distance
+	# Calculate spawn position with safety checks
+	var spawn_position = calculate_safe_spawn_position(system_center, player_pos, entry_direction)
 	
 	# Calculate entry velocity (coming toward system center)
 	var entry_velocity = -entry_direction * randf_range(800.0, 1200.0)
@@ -300,6 +331,44 @@ func calculate_hyperspace_entry() -> Dictionary:
 		"velocity": entry_velocity,
 		"origin_system": origin_system
 	}
+
+func calculate_safe_spawn_position(system_center: Vector2, player_pos: Vector2, preferred_direction: Vector2) -> Vector2:
+	"""Calculate a spawn position that's safe from player view and system center"""
+	var min_distance_from_center = 1500.0  # Minimum distance from system center
+	var min_distance_from_player = 1200.0  # Minimum distance from player
+	var max_attempts = 10
+	
+	for attempt in range(max_attempts):
+		# Start with preferred direction (from connected system)
+		var direction = preferred_direction
+		
+		# Add some randomization on later attempts
+		if attempt > 3:
+			var angle_variance = randf_range(-PI/4, PI/4)  # ±45 degrees
+			direction = direction.rotated(angle_variance)
+		
+		# Use spawn_distance but ensure minimum distances
+		var distance = max(spawn_distance, min_distance_from_center + 500.0)
+		var candidate_pos = system_center + direction * distance
+		
+		# Check distances
+		var distance_from_center = candidate_pos.distance_to(system_center)
+		var distance_from_player = candidate_pos.distance_to(player_pos)
+		
+		if distance_from_center >= min_distance_from_center and distance_from_player >= min_distance_from_player:
+			if debug_mode:
+				print("Safe spawn found on attempt ", attempt + 1, " at distance ", distance_from_center, " from center, ", distance_from_player, " from player")
+			return candidate_pos
+	
+	# Fallback: use a guaranteed safe position away from both center and player
+	var fallback_direction = (player_pos - system_center).normalized().rotated(PI)  # Opposite side from player
+	var fallback_distance = max(spawn_distance, min_distance_from_center + 1000.0)
+	var fallback_pos = system_center + fallback_direction * fallback_distance
+	
+	if debug_mode:
+		print("Using fallback spawn position at distance ", fallback_distance)
+	
+	return fallback_pos
 
 func get_entry_direction_from_system(origin_system: String) -> Vector2:
 	"""Get the direction an NPC should come from based on origin system"""

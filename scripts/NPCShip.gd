@@ -84,9 +84,9 @@ func apply_hue_shift():
 
 func randomize_ship_stats():
 	"""Add some variety to ship performance"""
-	thrust_modifier = randf_range(0.8, 1.2)
-	turn_rate_modifier = randf_range(0.8, 1.2)
-	visit_duration = randf_range(8.0, 20.0)  # Increased visit duration
+	thrust_modifier = randf_range(0.6, 1.2)
+	turn_rate_modifier = randf_range(0.6, 1.2)
+	visit_duration = randf_range(4.0, 10.0)  # Increased visit duration
 	
 	# Apply modifiers
 	thrust_power *= thrust_modifier
