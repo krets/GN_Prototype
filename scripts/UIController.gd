@@ -34,8 +34,8 @@ func create_minimap():
 	
 	# Set anchor to top-right so it stays in corner on screen resize
 	minimap.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
-	minimap.position.x -= minimap.custom_minimum_size.x + margin -1000
-	minimap.position.y += margin -400
+	minimap.position.x -= minimap.custom_minimum_size.x + margin
+	minimap.position.y += margin
 	
 	add_child(minimap)
 	print("Minimap created and positioned")

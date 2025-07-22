@@ -6,6 +6,17 @@
 	  "flavor_text": "Home to billions of humans across multiple worlds and stations. This system represents the heart of human civilization, where Earth's blue oceans still sparkle alongside the red deserts of terraformed Mars.",
 	  "background": "res://backgrounds/sol_nebula.png",
 	  "connections": ["alpha_centauri", "vega_system"],
+	  "traffic": {
+		"spawn_frequency": 5.0,
+		"max_npcs": 10,
+		"spawn_frequency_variance": 3.0,
+		"npc_config": {
+		  "thrust_power": 520.0,
+		  "rotation_speed": 3.2,
+		  "max_velocity": 420.0,
+		  "visit_duration_range": [3.0, 4.0]
+		}
+	  },
 	  "starfield": {
 		"layer_count": 3,
 		"base_density": 150,
@@ -92,6 +103,17 @@
 	  "flavor_text": "The first stepping stone beyond Sol, this system buzzes with the energy of pioneers and explorers. New Geneva orbits Proxima Centauri as a testament to human determination to spread among the stars.",
 	  "background": "res://backgrounds/alpha_centauri_nebula.png",
 	  "connections": ["sol_system", "sirius_system", "rigel_system"],
+	  "traffic": {
+		"spawn_frequency": 12.0,
+		"max_npcs": 4,
+		"spawn_frequency_variance": 4.0,
+		"npc_config": {
+		  "thrust_power": 480.0,
+		  "rotation_speed": 2.8,
+		  "max_velocity": 380.0,
+		  "visit_duration_range": [3.0, 9.0]
+		}
+	  },
 	  "starfield": {
 		"layer_count": 5,
 		"base_density": 200,
@@ -150,6 +172,17 @@
 	  "description": "A frontier trading hub",
 	  "flavor_text": "Rough miners and independent traders call this system home, drawn by rich mineral deposits and minimal government oversight. The bright blue-white star Vega illuminates a hardscrabble frontier where fortunes are made and lost daily.",
 	  "connections": ["sol_system", "arcturus_system", "capella_system"],
+	  "traffic": {
+		"spawn_frequency": 20.0,
+		"max_npcs": 2,
+		"spawn_frequency_variance": 8.0,
+		"npc_config": {
+		  "thrust_power": 450.0,
+		  "rotation_speed": 2.5,
+		  "max_velocity": 360.0,
+		  "visit_duration_range": [2.0, 12.0]
+		}
+	  },
 	  "celestial_bodies": [
 		{
 		  "id": "vega_prime",
@@ -184,6 +217,17 @@
 	  "description": "A wealthy commercial system",
 	  "flavor_text": "The brightest star in Earth's night sky hosts one of humanity's most prosperous worlds. Corporate executives and luxury merchants conduct business beneath the brilliant white light of this binary star system.",
 	  "connections": ["alpha_centauri", "aldebaran_system"],
+	  "traffic": {
+		"spawn_frequency": 6.0,
+		"max_npcs": 6,
+		"spawn_frequency_variance": 2.0,
+		"npc_config": {
+		  "thrust_power": 550.0,
+		  "rotation_speed": 3.5,
+		  "max_velocity": 450.0,
+		  "visit_duration_range": [3.0, 6.0]
+		}
+	  },
 	  "celestial_bodies": [
 		{
 		  "id": "sirius_major",
@@ -205,6 +249,17 @@
 	  "description": "An industrial manufacturing center",
 	  "flavor_text": "Massive shipyards orbit this blue supergiant star, churning out vessels for the Confederation fleet. The constant hammering of construction echoes through space as Rigel Forge works around the clock.",
 	  "connections": ["alpha_centauri", "antares_system", "aldebaran_system"],
+	  "traffic": {
+		"spawn_frequency": 10.0,
+		"max_npcs": 4,
+		"spawn_frequency_variance": 3.0,
+		"npc_config": {
+		  "thrust_power": 500.0,
+		  "rotation_speed": 2.9,
+		  "max_velocity": 400.0,
+		  "visit_duration_range": [4.0, 8.0]
+		}
+	  },
 	  "celestial_bodies": [
 		{
 		  "id": "rigel_forge",
@@ -239,6 +294,17 @@
 	  "description": "A quiet research system",
 	  "flavor_text": "Scientists and researchers pursue cutting-edge discoveries in the serene environment around this ancient red giant star. The system's isolation makes it perfect for sensitive experiments that require minimal interference.",
 	  "connections": ["vega_system", "capella_system", "deneb_system"],
+	  "traffic": {
+		"spawn_frequency": 25.0,
+		"max_npcs": 1,
+		"spawn_frequency_variance": 10.0,
+		"npc_config": {
+		  "thrust_power": 400.0,
+		  "rotation_speed": 2.2,
+		  "max_velocity": 320.0,
+		  "visit_duration_range": [5.0, 15.0]
+		}
+	  },
 	  "celestial_bodies": [
 		{
 		  "id": "arcturus_lab",
@@ -260,6 +326,17 @@
 	  "description": "A remote frontier outpost",
 	  "flavor_text": "On the very edge of known space, this distant white supergiant marks the boundary of human exploration. Only the most adventurous traders and explorers brave the long journey to this isolated outpost.",
 	  "connections": ["arcturus_system", "capella_system", "antares_system"],
+	  "traffic": {
+		"spawn_frequency": 35.0,
+		"max_npcs": 1,
+		"spawn_frequency_variance": 15.0,
+		"npc_config": {
+		  "thrust_power": 350.0,
+		  "rotation_speed": 2.0,
+		  "max_velocity": 300.0,
+		  "visit_duration_range": [8.0, 20.0]
+		}
+	  },
 	  "celestial_bodies": [
 		{
 		  "id": "deneb_outpost",
@@ -281,6 +358,17 @@
 	  "description": "A strategic military system",
 	  "flavor_text": "The Confederation's military might is on full display in this heavily fortified system around the orange giant star. Patrol fleets launch regularly from the naval base to maintain order throughout human space.",
 	  "connections": ["sirius_system", "rigel_system"],
+	  "traffic": {
+		"spawn_frequency": 7.0,
+		"max_npcs": 5,
+		"spawn_frequency_variance": 2.0,
+		"npc_config": {
+		  "thrust_power": 580.0,
+		  "rotation_speed": 3.8,
+		  "max_velocity": 480.0,
+		  "visit_duration_range": [2.0, 4.0]
+		}
+	  },
 	  "celestial_bodies": [
 		{
 		  "id": "aldebaran_base",
@@ -302,6 +390,17 @@
 	  "description": "A dangerous pirate haven",
 	  "flavor_text": "This red supergiant system attracts smugglers, pirates, and others who prefer to operate outside the law. Confederation patrols are few and far between, making it a haven for the galaxy's most wanted.",
 	  "connections": ["rigel_system", "deneb_system"],
+	  "traffic": {
+		"spawn_frequency": 18.0,
+		"max_npcs": 2,
+		"spawn_frequency_variance": 7.0,
+		"npc_config": {
+		  "thrust_power": 420.0,
+		  "rotation_speed": 2.6,
+		  "max_velocity": 340.0,
+		  "visit_duration_range": [1.0, 10.0]
+		}
+	  },
 	  "celestial_bodies": [
 		{
 		  "id": "antares_hideout",
@@ -323,6 +422,17 @@
 	  "description": "An agricultural supply system",
 	  "flavor_text": "Vast hydroponic farms and agricultural stations orbit this yellow giant star, feeding the growing population of human space. The system's peaceful nature and abundant food production make it a crucial link in the supply chain.",
 	  "connections": ["vega_system", "arcturus_system", "deneb_system"],
+	  "traffic": {
+		"spawn_frequency": 14.0,
+		"max_npcs": 3,
+		"spawn_frequency_variance": 5.0,
+		"npc_config": {
+		  "thrust_power": 460.0,
+		  "rotation_speed": 2.7,
+		  "max_velocity": 380.0,
+		  "visit_duration_range": [4.0, 9.0]
+		}
+	  },
 	  "celestial_bodies": [
 		{
 		  "id": "capella_farms",

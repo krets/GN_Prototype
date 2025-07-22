@@ -17,6 +17,7 @@ var border_color = Color(0.0, 1.0, 0.0, 1.0)      # Bright green
 var player_color = Color(1.0, 1.0, 0.0, 1.0)      # Yellow
 var planet_color = Color(0.0, 0.8, 0.0, 1.0)      # Medium green
 var station_color = Color(0.0, 1.0, 1.0, 1.0)     # Cyan
+var npc_color = Color(1.0, 0.5, 0.0, 1.0)         # Orange for NPCs
 var center_arrow_color = Color(1.0, 0.5, 0.0, 1.0) # Orange
 
 var player_ship: Node2D
@@ -65,6 +66,9 @@ func _draw():
 		if is_instance_valid(body):
 			draw_celestial_body(body, player_pos, center)
 	
+	# Draw NPC ships
+	draw_npc_ships(player_pos, center)
+	
 	# Draw player
 	draw_player(player_pos, center)
 	
@@ -100,6 +104,31 @@ func draw_celestial_body(body: Node2D, player_pos: Vector2, minimap_center: Vect
 	
 	# Draw a small border
 	draw_arc(minimap_pos, celestial_body_size, 0, TAU, 16, border_color, 1.0)
+
+func draw_npc_ships(player_pos: Vector2, minimap_center: Vector2):
+	"""Draw NPC ships as small dots on the minimap"""
+	# Find all NPC ships in the scene
+	var npc_ships = get_tree().get_nodes_in_group("npc_ships")
+	
+	for npc in npc_ships:
+		# Safety check
+		if not is_instance_valid(npc):
+			continue
+			
+		var relative_pos = (npc.global_position - player_pos) * zoom_scale
+		var minimap_pos = minimap_center + relative_pos
+		
+		# Only draw if within minimap radius
+		var distance_from_center = minimap_pos.distance_to(minimap_center)
+		if distance_from_center > minimap_radius:
+			continue
+		
+		# Draw NPC as a small dot
+		var npc_size = 2.5  # Smaller than celestial bodies
+		draw_circle(minimap_pos, npc_size, npc_color)
+		
+		# Optional: Draw a subtle outline
+		draw_arc(minimap_pos, npc_size, 0, TAU, 8, border_color, 0.5)
 
 func draw_player(player_pos: Vector2, minimap_center: Vector2):
 	# Player is always at the center of the minimap

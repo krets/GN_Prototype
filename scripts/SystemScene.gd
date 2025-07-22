@@ -1,5 +1,5 @@
 # =============================================================================
-# SYSTEM SCENE - Now manages planet animations per system
+# SYSTEM SCENE - Now with NPC Traffic Management
 # =============================================================================
 # SystemScene.gd
 extends Node2D
@@ -7,8 +7,10 @@ class_name SystemScene
 
 @onready var celestial_bodies_container = $CelestialBodies
 @onready var player_spawn = $PlayerSpawn
+@onready var traffic_manager = $TrafficManager
 
 func _ready():
+	add_to_group("system_scene")  # Add to group for easy finding
 	UniverseManager.system_changed.connect(_on_system_changed)
 	setup_system(UniverseManager.get_current_system())
 
@@ -71,3 +73,11 @@ func _notification(what):
 	if what == NOTIFICATION_VISIBILITY_CHANGED and visible:
 		# Resume animations when system becomes visible
 		call_deferred("resume_all_planet_animations")
+
+# Debug methods for NPC traffic
+func _input(event):
+	if OS.is_debug_build():
+		if event.is_action_pressed("ui_accept"):  # Enter key
+			if traffic_manager:
+				traffic_manager.set_debug_mode(!traffic_manager.debug_mode)
+				print("Traffic debug mode: ", traffic_manager.debug_mode)
