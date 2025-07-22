@@ -1,10 +1,28 @@
-[gd_scene load_steps=5 format=3 uid="uid://el1ywym68otq"]
+[gd_scene load_steps=10 format=3 uid="uid://el1ywym68otq"]
 
 [ext_resource type="Script" uid="uid://dpfhxkdfjm6rd" path="res://scripts/PlayerShip.gd" id="1_iig01"]
 [ext_resource type="Texture2D" uid="uid://c44abuabs8x3i" path="res://sprites/ships/player_ship.png" id="2_hkka0"]
+[ext_resource type="Shader" uid="uid://dmtc0nytu1x73" path="res://shaders/PlayerShipExhaust.gdshader" id="3_a884r"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_hkka0"]
 radius = 19.0
+
+[sub_resource type="Gradient" id="Gradient_a884r"]
+offsets = PackedFloat32Array(0.287749, 0.615385)
+colors = PackedColorArray(1, 1, 1, 0.470588, 0.94902, 0.588235, 0, 0.329412)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_qsm08"]
+gradient = SubResource("Gradient_a884r")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qsm08"]
+shader = ExtResource("3_a884r")
+shader_parameter/gradient_tex = SubResource("GradientTexture1D_qsm08")
+shader_parameter/edge_start = 0.591
+shader_parameter/edge_end = 0.0
+
+[sub_resource type="Curve" id="Curve_a884r"]
+_data = [Vector2(0, 0.266129), 0.0, 0.0, 0, 0, Vector2(0.264198, 1), 0.0, 0.0, 0, 0]
+point_count = 2
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_a884r"]
 radius = 100.02
@@ -15,26 +33,29 @@ linear_damp = 0.1
 angular_damp = 1.0
 script = ExtResource("1_iig01")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_hkka0")
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_hkka0")
 
 [node name="EngineParticles" type="CPUParticles2D" parent="."]
-position = Vector2(-1, 22)
+material = SubResource("ShaderMaterial_qsm08")
+position = Vector2(0, 21)
 emitting = false
-amount = 600
-lifetime = 1.12
-lifetime_randomness = 0.65
+amount = 200
+lifetime = 1.15
+lifetime_randomness = 0.75
 direction = Vector2(0, 1)
-spread = 20.0
+spread = 30.0
 gravity = Vector2(0, 0)
-initial_velocity_min = 100.0
+initial_velocity_min = 50.0
 initial_velocity_max = 100.0
+scale_amount_max = 35.0
+scale_amount_curve = SubResource("Curve_a884r")
 color = Color(1, 1, 0.286275, 1)
 hue_variation_min = 0.55
 hue_variation_max = 0.91
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_hkka0")
 
 [node name="InteractionArea" type="Area2D" parent="."]
 
