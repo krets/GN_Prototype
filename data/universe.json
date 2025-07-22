@@ -22,13 +22,28 @@
 		  "name": "Earth",
 		  "type": "planet",
 		  "description": "The blue marble, humanity's homeworld",
-		  "position": { "x": 400, "y": -300 },
+		  "position": { "x": 800, "y": -600 },
 		  "scale": 1.0,
 		  "can_land": true,
 		  "services": ["shipyard", "outfitter", "commodity_exchange", "mission_computer"],
 		  "government": "confederation",
 		  "tech_level": 5,
-		  "population": 8000000000
+		  "population": 8000000000,
+		  "animations": {
+			"uv_offset_x": {
+			  "type": "linear", 
+			  "rate": 0.02
+			},
+			"cloud_offset_x": {
+			  "type": "linear", 
+			  "rate": 0.025
+			},
+			"rim_light_intensity": {
+			  "type": "sine", 
+			  "rate": 2.0, 
+			  "amplitude": 0.1
+			}
+		  }
 		},
 		{
 		  "id": "luna",

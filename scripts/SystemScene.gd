@@ -1,5 +1,5 @@
 # =============================================================================
-# SYSTEM SCENE - Fixed camera positioning with planet scaling support + minimap group
+# SYSTEM SCENE - Now manages planet animations per system
 # =============================================================================
 # SystemScene.gd
 extends Node2D
@@ -9,11 +9,12 @@ class_name SystemScene
 @onready var player_spawn = $PlayerSpawn
 
 func _ready():
-	add_to_group("system_scene")  # Add this line for minimap detection
 	UniverseManager.system_changed.connect(_on_system_changed)
 	setup_system(UniverseManager.get_current_system())
 
 func _on_system_changed(system_id: String):
+	# Pause animations in old system before switching
+	pause_all_planet_animations()
 	setup_system(UniverseManager.get_current_system())
 
 func setup_system(system_data: Dictionary):
@@ -52,3 +53,21 @@ func spawn_celestial_bodies(bodies_data: Array):
 			celestial_body.scale = Vector2(body_data.scale, body_data.scale)
 		
 		celestial_bodies_container.add_child(celestial_body)
+
+func pause_all_planet_animations():
+	"""Pause animations on all planets (performance optimization when leaving system)"""
+	for child in celestial_bodies_container.get_children():
+		if child.has_method("pause_animations"):
+			child.pause_animations()
+
+func resume_all_planet_animations():
+	"""Resume animations on all planets (when entering system)"""
+	for child in celestial_bodies_container.get_children():
+		if child.has_method("resume_animations"):
+			child.resume_animations()
+
+# Called when the system becomes active (e.g., after hyperspace)
+func _notification(what):
+	if what == NOTIFICATION_VISIBILITY_CHANGED and visible:
+		# Resume animations when system becomes visible
+		call_deferred("resume_all_planet_animations")
