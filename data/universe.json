@@ -7,8 +7,8 @@
 	  "background": "res://backgrounds/sol_nebula.png",
 	  "connections": ["alpha_centauri", "vega_system"],
 	  "traffic": {
-		"spawn_frequency": 3.0,
-		"max_npcs": 10,
+		"spawn_frequency": 5.0,
+		"max_npcs": 5,
 		"spawn_frequency_variance": 3.0,
 		"npc_config": {
 		  "thrust_power": 520.0,
@@ -43,16 +43,16 @@
 		  "animations": {
 			"uv_offset_x": {
 			  "type": "linear", 
-			  "rate": 0.02
+			  "rate": 0.01
 			},
 			"cloud_offset_x": {
 			  "type": "linear", 
-			  "rate": 0.025
+			  "rate": 0.015
 			},
 			"rim_light_intensity": {
 			  "type": "sine", 
 			  "rate": 2.0, 
-			  "amplitude": 0.1
+			  "amplitude": 0.2
 			}
 		  }
 		},
@@ -80,7 +80,22 @@
 		  "services": ["shipyard", "outfitter", "commodity_exchange", "mission_computer"],
 		  "government": "confederation",
 		  "tech_level": 4,
-		  "population": 100000000
+		  "population": 8000000000,
+		  "animations": {
+			"uv_offset_x": {
+			  "type": "linear", 
+			  "rate": 0.012
+			},
+			"cloud_offset_x": {
+			  "type": "linear", 
+			  "rate": 0.017
+			},
+			"rim_light_intensity": {
+			  "type": "sine", 
+			  "rate": 3.0, 
+			  "amplitude": 0.1
+			}
+		  }
 		},
 		{
 		  "id": "asteroid_belt",
@@ -127,17 +142,37 @@
 	  },
 	  "celestial_bodies": [
 		{
-		  "id": "proxima_b",
+		  "id": "new_geneva",
 		  "name": "New Geneva",
 		  "type": "planet",
 		  "description": "A terraformed world orbiting Proxima Centauri",
-		  "position": { "x": -1200, "y": 800 },
+		  "position": { "x": 1000, "y": 800 },
 		  "scale": 1.1,
 		  "can_land": true,
 		  "services": ["shipyard", "outfitter", "commodity_exchange", "mission_computer"],
 		  "government": "confederation",
 		  "tech_level": 4,
-		  "population": 50000000
+		  "population": 8000000000,
+		  "animations": {
+			"uv_offset_x": {
+			  "type": "linear", 
+			  "rate": -0.15
+			},
+			"uv_offset_y": {
+			  "type": "linear", 
+			  "rate": -0.1
+			},
+			"river_strength": {
+			  "type": "sine", 
+			  "rate": 6.0, 
+			  "amplitude": 1
+			},
+			"sphere_strength": {
+			  "type": "sine", 
+			  "rate": 7.0, 
+			  "amplitude": 5
+			}
+		  }
 		},
 		{
 		  "id": "centauri_station",
@@ -151,6 +186,38 @@
 		  "government": "confederation", 
 		  "tech_level": 5,
 		  "population": 75000
+		},
+		{
+		  "id": "proxima_b",
+		  "name": "Proxima B",
+		  "type": "planet",
+		  "description": "A terraformed world orbiting Proxima Centauri",
+		  "position": { "x": -1200, "y": 800 },
+		  "scale": 1.1,
+		  "can_land": true,
+		  "services": ["shipyard", "outfitter", "commodity_exchange", "mission_computer"],
+		  "government": "confederation",
+		  "tech_level": 4,
+		  "population": 8000000000,
+		  "animations": {
+			"uv_offset_x": {
+			  "type": "linear", 
+			  "rate": -0.01
+			},
+			"cloud_offset_x": {
+			  "type": "linear", 
+			  "rate": 0.02
+			},
+			"cloud_offset_y": {
+			  "type": "linear", 
+			  "rate": 0.025
+			},
+			"cloud_sharpness": {
+			  "type": "sine", 
+			  "rate": 0.3, 
+			  "amplitude": 0.1
+			}
+		  }
 		},
 		{
 		  "id": "alpha_centauri_b",
@@ -195,7 +262,36 @@
 		  "services": ["outfitter", "commodity_exchange"],
 		  "government": "independent",
 		  "tech_level": 3,
-		  "population": 2000000
+		  "population": 8000000000,
+		  "animations": {
+			"uv_offset_x": {
+			  "type": "linear", 
+			  "rate": 0.01
+			},
+			"uv_offset_y": {
+			  "type": "linear", 
+			  "rate": -0.02
+			},
+			"cloud_offset_x": {
+			  "type": "linear", 
+			  "rate": 0.02
+			},
+			"rim_light_intensity": {
+			  "type": "sine", 
+			  "rate": 1, 
+			  "amplitude": 1
+			},
+			"light_intensity": {
+			  "type": "sine", 
+			  "rate": 1, 
+			  "amplitude": 1
+			},
+			"warp_strength": {
+			  "type": "sine", 
+			  "rate": 0.05, 
+			  "amplitude": 0.2
+			}
+		  }
 		},
 		{
 		  "id": "vega_station",
@@ -285,7 +381,26 @@
 		  "services": ["commodity_exchange", "mission_computer"],
 		  "government": "confederation",
 		  "tech_level": 4,
-		  "population": 80000000
+		  "population": 100000000,
+		  "animations": {
+			"uv_offset_x": {
+			  "type": "linear", 
+			  "rate": 0.01
+			},
+			"cloud_offset_x": {
+			  "type": "linear", 
+			  "rate": 0.02
+			},
+			"cloud_offset_y": {
+			  "type": "linear", 
+			  "rate": 0.025
+			},
+			"continent_threshold": {
+			  "type": "sine", 
+			  "rate": 1, 
+			  "amplitude": 0.01
+			}
+		  }
 		}
 	  ]
 	},
