@@ -86,18 +86,193 @@ func spawn_npc():
 
 func create_npc_ship() -> NPCShip:
 	"""Create and configure a new NPC ship"""
-	var npc_scene = preload("res://scenes/NPCShip.tscn")
-	if not npc_scene:
+	var npc_ship_scene = load("res://scenes/NPCShip.tscn")
+	if not npc_ship_scene:
 		push_error("Could not load NPCShip.tscn")
 		return null
 	
-	var npc_ship = npc_scene.instantiate()
+	var npc_ship = npc_ship_scene.instantiate()
 	
 	# Configure with system settings
 	var npc_config = system_traffic_config.get("npc_config", default_config.npc_config)
 	npc_ship.configure_npc(npc_config)
 	
 	return npc_ship
+
+func spawn_initial_npcs():
+	"""Spawn NPCs already in the system when player arrives"""
+	var max_npcs = system_traffic_config.get("max_npcs", default_config.max_npcs)
+	var initial_count = max(1, max_npcs / 2)  # Spawn about half the max NPCs initially
+	
+	if debug_mode:
+		print("TrafficManager: Spawning ", initial_count, " initial NPCs")
+	
+	for i in range(initial_count):
+		spawn_existing_npc()
+		
+		# Small delay between spawns to spread them out
+		await get_tree().create_timer(0.1).timeout
+
+func spawn_existing_npc():
+	"""Spawn an NPC that's already been in the system for a while"""
+	var npc_ship = create_npc_ship()
+	if not npc_ship:
+		return
+	
+	# Use call_deferred to avoid "busy setting up children" error
+	get_parent().add_child.call_deferred(npc_ship)
+	current_npcs.append(npc_ship)
+	
+	# Wait for the NPC to be added to the scene tree before configuring
+	await get_tree().process_frame
+	
+	# Make sure the NPC is still valid after the frame wait
+	if not is_instance_valid(npc_ship):
+		return
+	
+	# Choose a random initial state and position
+	var initial_state = choose_initial_npc_state()
+	
+	match initial_state:
+		"visiting":
+			spawn_npc_at_celestial_body(npc_ship)
+		"traveling_to_planet":
+			spawn_npc_traveling_to_planet(npc_ship)
+		"traveling_to_exit":
+			spawn_npc_traveling_to_exit(npc_ship)
+		_:  # Default case including "mid_system"
+			spawn_npc_mid_system(npc_ship)
+	
+	if debug_mode:
+		print("TrafficManager: Spawned existing NPC in state: ", initial_state)
+
+func choose_initial_npc_state() -> String:
+	"""Choose what state the pre-existing NPC should be in"""
+	var states = ["visiting", "traveling_to_planet", "traveling_to_exit", "mid_system"]
+	var weights = [0.3, 0.3, 0.2, 0.2]  # 30% visiting, 30% traveling to planet, etc.
+	
+	var random_value = randf()
+	var cumulative = 0.0
+	
+	for i in range(states.size()):
+		cumulative += weights[i]
+		if random_value <= cumulative:
+			return states[i]
+	
+	return "mid_system"
+
+func spawn_npc_at_celestial_body(npc_ship: NPCShip):
+	"""Spawn NPC already visiting a celestial body"""
+	var celestial_body = choose_random_celestial_body()
+	if not celestial_body:
+		# Fallback to mid-system spawn
+		spawn_npc_mid_system(npc_ship)
+		return
+	
+	# Position near the celestial body
+	var body_pos = celestial_body.global_position
+	var offset = Vector2(randf_range(-100, 100), randf_range(-100, 100))
+	npc_ship.global_position = body_pos + offset
+	npc_ship.linear_velocity = Vector2.ZERO
+	
+	# Set NPC state to visiting
+	npc_ship.target_celestial_body = celestial_body
+	npc_ship.current_ai_state = npc_ship.AIState.VISITING_BODY
+	npc_ship.visit_timer = randf_range(0, npc_ship.visit_duration * 0.8)  # Already been there a while
+
+func spawn_npc_traveling_to_planet(npc_ship: NPCShip):
+	"""Spawn NPC traveling toward a celestial body"""
+	var celestial_body = choose_random_celestial_body()
+	if not celestial_body:
+		spawn_npc_mid_system(npc_ship)
+		return
+	
+	# Position somewhere between system edge and the celestial body
+	var body_pos = celestial_body.global_position
+	var system_center = Vector2.ZERO
+	var direction_to_body = (body_pos - system_center).normalized()
+	
+	# Random distance along the path
+	var distance_factor = randf_range(0.3, 0.8)
+	var planet_distance = 2000 * distance_factor
+	npc_ship.global_position = system_center + direction_to_body * planet_distance
+	
+	# Set velocity toward the planet
+	var travel_speed = randf_range(200, 300)
+	npc_ship.linear_velocity = (body_pos - npc_ship.global_position).normalized() * travel_speed
+	
+	# Set appropriate rotation
+	npc_ship.rotation = npc_ship.linear_velocity.angle() - PI/2
+	
+	# Set NPC state
+	npc_ship.target_celestial_body = celestial_body
+	npc_ship.current_ai_state = npc_ship.AIState.FLYING_TO_TARGET
+
+func spawn_npc_traveling_to_exit(npc_ship: NPCShip):
+	"""Spawn NPC traveling toward hyperspace exit"""
+	var system_center = Vector2.ZERO
+	var exit_direction = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
+	
+	# Position somewhere in mid-system
+	var exit_distance = randf_range(800, 1500)
+	npc_ship.global_position = system_center + Vector2(randf_range(-exit_distance, exit_distance), randf_range(-exit_distance, exit_distance))
+	
+	# Set velocity toward exit
+	var travel_speed = randf_range(150, 250)
+	npc_ship.linear_velocity = exit_direction * travel_speed
+	
+	# Set appropriate rotation
+	npc_ship.rotation = npc_ship.linear_velocity.angle() - PI/2
+	
+	# Set exit target
+	npc_ship.target_position = system_center + exit_direction * 3500.0
+	npc_ship.current_ai_state = npc_ship.AIState.FLYING_TO_EXIT
+
+func spawn_npc_mid_system(npc_ship: NPCShip):
+	"""Spawn NPC in middle of system with random movement"""
+	# Random position in mid-system
+	var mid_distance = randf_range(500, 1200)
+	var spawn_angle = randf() * TAU
+	npc_ship.global_position = Vector2.from_angle(spawn_angle) * mid_distance
+	
+	# Random velocity
+	var travel_speed = randf_range(100, 200)
+	var travel_angle = randf() * TAU
+	npc_ship.linear_velocity = Vector2.from_angle(travel_angle) * travel_speed
+	
+	# Set appropriate rotation
+	npc_ship.rotation = npc_ship.linear_velocity.angle() - PI/2
+	
+	# Choose a random celestial body to target
+	var celestial_body = choose_random_celestial_body()
+	if celestial_body:
+		npc_ship.target_celestial_body = celestial_body
+		npc_ship.current_ai_state = npc_ship.AIState.FLYING_TO_TARGET
+	else:
+		# No celestial bodies, head to exit
+		var exit_direction = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
+		npc_ship.target_position = exit_direction * 3500.0
+		npc_ship.current_ai_state = npc_ship.AIState.FLYING_TO_EXIT
+
+func choose_random_celestial_body() -> Node2D:
+	"""Choose a random celestial body from the current system"""
+	var system_scene = get_tree().get_first_node_in_group("system_scene")
+	if not system_scene:
+		return null
+	
+	var celestial_container = system_scene.get_node_or_null("CelestialBodies")
+	if not celestial_container:
+		return null
+	
+	var available_bodies = []
+	for child in celestial_container.get_children():
+		if child.has_method("can_interact"):
+			available_bodies.append(child)
+	
+	if available_bodies.size() > 0:
+		return available_bodies[randi() % available_bodies.size()]
+	
+	return null
 
 func calculate_hyperspace_entry() -> Dictionary:
 	"""Calculate where and how an NPC should enter from hyperspace"""
@@ -201,6 +376,9 @@ func _on_system_changed(system_id: String):
 	# Load new system configuration
 	load_system_traffic_config(system_id)
 	
+	# Spawn initial NPCs to populate the system
+	spawn_initial_npcs()
+	
 	# Activate traffic for new system
 	active = true
 	
@@ -210,7 +388,7 @@ func _on_system_changed(system_id: String):
 	if debug_mode:
 		print("TrafficManager: System changed to ", system_id, " - Config: ", system_traffic_config)
 
-func load_system_traffic_config(system_id: String):
+func load_system_traffic_config(_system_id: String):
 	"""Load traffic configuration for the specified system"""
 	var system_data = UniverseManager.get_current_system()
 	system_traffic_config = system_data.get("traffic", {})
@@ -233,7 +411,8 @@ func cleanup_all_npcs():
 	"""Remove all current NPCs (used when changing systems)"""
 	for npc in current_npcs:
 		if is_instance_valid(npc):
-			npc.cleanup_and_remove()
+			# Use call_deferred to avoid tree access issues during system changes
+			npc.call_deferred("queue_free")
 	current_npcs.clear()
 
 func _on_npc_removed(npc: NPCShip):
@@ -242,9 +421,9 @@ func _on_npc_removed(npc: NPCShip):
 	if debug_mode:
 		print("TrafficManager: NPC removed, ", current_npcs.size(), " remaining")
 
-func set_debug_mode(enabled: bool):
+func set_debug_mode(_enabled: bool):
 	"""Enable/disable debug mode"""
-	debug_mode = enabled
+	debug_mode = _enabled
 	queue_redraw()
 
 func _draw():

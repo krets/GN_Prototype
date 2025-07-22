@@ -7,7 +7,7 @@
 	  "background": "res://backgrounds/sol_nebula.png",
 	  "connections": ["alpha_centauri", "vega_system"],
 	  "traffic": {
-		"spawn_frequency": 5.0,
+		"spawn_frequency": 1.0,
 		"max_npcs": 10,
 		"spawn_frequency_variance": 3.0,
 		"npc_config": {

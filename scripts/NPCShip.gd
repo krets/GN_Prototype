@@ -84,9 +84,9 @@ func apply_hue_shift():
 
 func randomize_ship_stats():
 	"""Add some variety to ship performance"""
-	thrust_modifier = randf_range(0.6, 1.2)
-	turn_rate_modifier = randf_range(0.6, 1.2)
-	visit_duration = randf_range(4.0, 10.0)  # Increased visit duration
+	thrust_modifier = randf_range(0.8, 1.2)
+	turn_rate_modifier = randf_range(0.8, 1.2)
+	visit_duration = randf_range(8.0, 20.0)  # Increased visit duration
 	
 	# Apply modifiers
 	thrust_power *= thrust_modifier
@@ -293,20 +293,20 @@ func navigate_to_position_with_decel(state: PhysicsDirectBodyState2D, target_pos
 	var angle_diff = angle_difference(rotation, desired_rotation)
 	
 	# Smooth turning - only turn if the angle difference is significant
-	if abs(angle_diff) > 0.4:  # Larger threshold to reduce jittery movement
+	if abs(angle_diff) > 0.2:  # Larger threshold to reduce jittery movement
 		var turn_direction = sign(angle_diff) * -1
-		var turn_speed = rotation_speed * 0.3  # Slower turning for smoothness
+		var turn_speed = rotation_speed * 0.7  # Slower turning for smoothness
 		state.angular_velocity = turn_direction * turn_speed
 	else:
 		# Gradually reduce angular velocity for smoother movement
-		state.angular_velocity *= 0.95
+		state.angular_velocity *= 0.8
 	
 	# Calculate if we need to decelerate
 	var decel_distance = stop_distance * 3.0  # Start decelerating 3x the stop distance away
 	var facing_direction = Vector2(0, -1).rotated(rotation)
 	var dot_product = facing_direction.dot(direction_to_target)
 	
-	if dot_product > 0.1:  # Facing within ~70 degrees (more lenient)
+	if dot_product > 0.3:  # Facing within ~70 degrees (more lenient)
 		if distance_to_target > decel_distance:
 			# Far away - normal thrust
 			var thrust_vector = Vector2(0, -thrust_power * 0.8).rotated(rotation)  # Reduced thrust
@@ -347,7 +347,7 @@ func navigate_to_position_relaxed(state: PhysicsDirectBodyState2D, target_pos: V
 	var angle_diff = angle_difference(rotation, desired_rotation)
 	
 	# Very smooth turning
-	if abs(angle_diff) > 0.6:  # Even larger threshold
+	if abs(angle_diff) > 0.3:  # Even larger threshold
 		var turn_direction = sign(angle_diff) * -1
 		var turn_speed = rotation_speed * 0.5  # Even slower turning
 		state.angular_velocity = turn_direction * turn_speed
@@ -464,16 +464,20 @@ func limit_velocity(state):
 func cleanup_and_remove():
 	"""Clean up and remove this NPC"""
 	print("NPC completing hyperspace exit and removing")
-	# Notify traffic manager that this NPC is leaving
-	var traffic_manager = get_tree().get_first_node_in_group("traffic_manager")
-	if traffic_manager and traffic_manager.has_method("_on_npc_removed"):
-		traffic_manager._on_npc_removed(self)
+	
+	# Notify traffic manager that this NPC is leaving (with safety check)
+	var tree = get_tree()
+	if tree:
+		var traffic_manager = tree.get_first_node_in_group("traffic_manager")
+		if traffic_manager and traffic_manager.has_method("_on_npc_removed"):
+			traffic_manager._on_npc_removed(self)
 	
 	queue_free()
 
 func _on_system_changed(_system_id: String):
 	"""Clean up if system changes while NPC exists"""
-	cleanup_and_remove()
+	# Use call_deferred to avoid tree access issues during system transitions
+	call_deferred("queue_free")
 
 # Debug visualization
 func _draw():
